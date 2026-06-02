@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://playcanvas.com",
+    "name": "PlayCanvas | Open Source WebGL & WebGPU Game Engine",
+    "snippet": "Build stunning games, 3D visualizations, AR/VR experiences and playable ads with PlayCanvas, the open source JavaScript engine powered by WebGL and WebGPU.",
+    "host_name": "playcanvas.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=-0envvPmj5k",
+    "name": "PlayCanvas Game Engine OPEN SOURCED! - YouTube",
+    "snippet": "The PlayCanvas Game engine, one of the best game engines for 3D WebGPU and WebGL games is now FULLY open source. In addition to the backend ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/playcanvas/awesome-playcanvas",
+    "name": "A curated list of awesome PlayCanvas assets, resources, and more.",
+    "snippet": "This list is a curated collection of awesome resources, tools, tutorials and projects using the PlayCanvas engine to help developers make awesome games and ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.abeautifulsite.net/posts/playcanvas-an-easy-open-source-webgl-game-engine",
+    "name": "PlayCanvas: an easy, open source WebGL game engine",
+    "snippet": "PlayCanvas is the world's easiest to use WebGL Game Engine. It's free, it's open source and it's backed by amazing developer tools.",
+    "host_name": "www.abeautifulsite.net",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.playcanvas.com/playcanvas-editor-frontend-is-now-open-source",
+    "name": "PlayCanvas Editor Frontend is now Open Source",
+    "snippet": "The PlayCanvas Editor is a powerful visual editing environment for building WebGL, WebGPU, and WebXR applications. It has been the cornerstone ...",
+    "host_name": "blog.playcanvas.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/programming/comments/27aiof/playcanvas_takes_its_webgl_video_game_engine_open",
+    "name": "PlayCanvas takes its WebGL video game engine open source - Reddit",
+    "snippet": "We have extensive games industry experience to bring to the design of the engine. We're so much more than a rendering engine. Physics, Input, ...",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/PlayCanvas/comments/1md93g0/playcanvas_editor_frontend_is_now_open_source",
+    "name": "PlayCanvas Editor Frontend is now Open Source - Reddit",
+    "snippet": "... source benefits. PlayCanvas license information. PlayCanvas free tier features. PlayCanvas engine overview. Best PlayCanvas games. Open App.",
+    "host_name": "www.reddit.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://playcanvas.com/products/engine",
+    "name": "PlayCanvas Engine | Open Source 3D JavaScript Engine",
+    "snippet": "The PlayCanvas Engine is a high performance, open source JavaScript engine built on WebGL, WebGPU, WebXR and glTF. Lightweight, fast and free to use.",
+    "host_name": "playcanvas.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://sourceforge.net/projects/playcanvas-webgl-game.mirror",
+    "name": "PlayCanvas Engine download | SourceForge.net",
+    "snippet": "PlayCanvas is an open-source game engine. It uses HTML5 and WebGL to run games and other interactive 3D content in any mobile or desktop browser.",
+    "host_name": "sourceforge.net",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://hacks.mozilla.org/2014/06/playcanvas-goes-open-source",
+    "name": "PlayCanvas Goes Open Source - the Web developer blog",
+    "snippet": "The PlayCanvas Engine is a JavaScript library engineered specifically for building video games. It implements all of the major components that you need to ...",
+    "host_name": "hacks.mozilla.org",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
