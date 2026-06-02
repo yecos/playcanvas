@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api",
+    "name": "REST API - PlayCanvas Developer Site",
+    "snippet": "PlayCanvas REST API overview: beta status, HTTPS and bearer token auth, endpoint index, and how to call the API from your tools.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/asset-get",
+    "name": "Assets - Get Asset - PlayCanvas Developer Site",
+    "snippet": "GET asset metadata by id and branch id: REST route, curl example, and fields returned for a single project asset.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/asset-create",
+    "name": "Assets - Create asset - PlayCanvas Developer Site",
+    "snippet": "Create script, HTML, CSS, text, shader, or JSON assets via POST /api/assets with supported types, body fields, and examples.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/playcanvas/playcanvas-rest-api-tools",
+    "name": "A set of tools to use with the PlayCanvas REST API for  - GitHub",
+    "snippet": "A set of tools to use with the PlayCanvas REST API for common jobs such as downloading a build and archiving a project ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/how-to-download-a-project-with-the-rest-api/2610",
+    "name": "How to download a project with the REST API - PlayCanvas Forum",
+    "snippet": "When you use POST you must pass data in the form of JSON. The parameters you need to pass are documented in the endpoint's documentation page.",
+    "host_name": "forum.playcanvas.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/app-get-project",
+    "name": "Apps - Get project apps | PlayCanvas Developer Site",
+    "snippet": "... Assets · Scripting · Graphics · Gaussian Splatting · Animation · Physics · 2D · User Interface · XR · Optimization. Foundational APIs. REST API · Apps - ...",
+    "host_name": "developer.playcanvas.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/get-asset-file-from-the-rest-api/24259",
+    "name": "Get Asset File from the REST API - PlayCanvas Forum",
+    "snippet": "For this purpose I'm trying to use the REST API, specifically the route documented here REST API GET ASSET FILE , using the following code:",
+    "host_name": "forum.playcanvas.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/asset-list",
+    "name": "Assets - List assets | PlayCanvas Developer Site",
+    "snippet": "Paginated listing of all assets in a project branch via GET with skip and limit parameters, plus response shape and examples.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/solved-announcing-the-playcanvas-rest-api/2498",
+    "name": "[SOLVED] Announcing the PlayCanvas REST API",
+    "snippet": "The REST API is available to all Organization account holders and allows developers to automate processes to help them with their development.",
+    "host_name": "forum.playcanvas.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/asset-file",
+    "name": "Assets - Get Asset File - PlayCanvas Developer Site",
+    "snippet": "Route URL: GET https://playcanvas.com/api/assets/:assetId/file/:filename?branchId=:branchId Description: Get the details of a single asset.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/playcanvas/editor-mcp-server",
+    "name": "MCP Server for AI automation of the PlayCanvas Editor - GitHub",
+    "snippet": "Install Claude Desktop. Go to Claude > Settings . Select Developer and then Edit Config . This will open claude_desktop_config.json , your MCP Config JSON file.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/ai-access-to-project/39883",
+    "name": "AI access to project - Help & Support - PlayCanvas Discussion",
+    "snippet": "I want to do AI access to my project. But I haven't see any example.Wondering how to do it?",
+    "host_name": "forum.playcanvas.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/mcp-error-on-add-entity/39618",
+    "name": "MCP error on add entity - Help & Support - PlayCanvas Forum",
+    "snippet": "I'm using the PlayCanvas MCP Server with Claude Desktop Pro on Windows, and I'm experiencing issues with write operations after trying all ...",
+    "host_name": "forum.playcanvas.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://claudemarketplaces.com/mcp/playcanvas/editor-mcp-server",
+    "name": "PlayCanvas Editor | MCP Servers",
+    "snippet": "Setup requires loading an unpacked Chrome extension and pointing your MCP config at the TypeScript server. Worth noting that it needs a Pro Claude account for ...",
+    "host_name": "claudemarketplaces.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/PlayCanvas/comments/1q7ckn6/announcing_playcanvas_editor_mcp_server_v010_now",
+    "name": "Announcing PlayCanvas Editor MCP Server v0.1.0 - Reddit",
+    "snippet": "We're excited to share the first official release of the PlayCanvas Editor MCP Server (v0.1.0)! This build adds powerful new tools that help ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mcpmarket.com/server/playcanvas-editor-ai-automation",
+    "name": "PlayCanvas Editor AI: Automate Game Development - MCP Market",
+    "snippet": "Automates the PlayCanvas Editor using an LLM for tasks such as creating and modifying entities, managing assets, and manipulating scene settings.",
+    "host_name": "mcpmarket.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mcp.so/server/editor-mcp-server",
+    "name": "Editor Mcp Server",
+    "snippet": "To use the MCP Server, install the necessary dependencies via npm, set up the Chrome extension, and configure the server with either Claude Desktop or Cursor.",
+    "host_name": "mcp.so",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=31nwCHtDAv8",
+    "name": "Build AI Agent with MCP Servers to Automate - YouTube",
+    "snippet": "How it can leverage LLM Capabilities 28:47 - Install MCP Client and work with Browser Automation MCP Server 43:23 - Configure SQL MCP Server ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://glama.ai/mcp/servers/@playcanvas/editor-mcp-server",
+    "name": "PlayCanvas Editor MCP Server - Glama",
+    "snippet": "How do I use PlayCanvas Editor MCP Server? Click on \"Install Server\". Wait a few minutes for the server to deploy. Once ready, it will show a \"Started\" state.",
+    "host_name": "glama.ai",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@hijessicahsu/set-up-playcanvas-mcp-with-claude-on-mac-11ff2dfbf47b",
+    "name": "Set up PlayCanvas MCP with Claude on Mac | by jessica hsu",
+    "snippet": "Set up PlayCanvas MCP with Claude on Mac · cd editor-mcp-server · npm install · copy the MCP Config JSON File from editor-mcp-server page. One ...",
+    "host_name": "medium.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

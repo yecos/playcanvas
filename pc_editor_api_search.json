@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api",
+    "name": "REST API - PlayCanvas Developer Site",
+    "snippet": "You can generate an Access Token by going to your Organization's Account page. Account Tab. In the API Tokens section click on Generate Token. Generate Token.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/rest-api-error-token-does-not-have-required-scope/31066",
+    "name": "REST API: {\"error\": \"Token does not have required scope\"}",
+    "snippet": "I want to access project information via API to get the name of the project. I do that by using this link from the API documentation.",
+    "host_name": "forum.playcanvas.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/editor/editor-api",
+    "name": "Editor API - PlayCanvas Developer Site",
+    "snippet": "The Editor has a user accessible API that is currently in beta which can be used to help automate and extend the base functionality.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/app-get-project",
+    "name": "Apps - Get project apps | PlayCanvas Developer Site",
+    "snippet": "Lists all the published Apps of a Project. Example​. curl -H \"Authorization: Bearer {accessToken}\" https://playcanvas.com/api/projects ...",
+    "host_name": "developer.playcanvas.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/playcanvas/playcanvas-rest-api-tools",
+    "name": "A set of tools to use with the PlayCanvas REST API for  - GitHub",
+    "snippet": "This is a repo with a setup of tools to handle some of the more common needs of users with the REST API. Currently they are: Downloading a build to self ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/get-asset-file-from-the-rest-api/24259",
+    "name": "Get Asset File from the REST API - PlayCanvas Forum",
+    "snippet": "Hello everyone, I'll get straight to the point, I'm trying to get an asset file from a private Playcanvas project I have access to.",
+    "host_name": "forum.playcanvas.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/rest-api-how-to-create-a-new-project/31402",
+    "name": "REST API: how to create a new project? - PlayCanvas Forum",
+    "snippet": "Hi, it is possible to create new projects via REST API? ... Hi @dfbits and welcome,. No currently there isn't an API endpoint to do that. There ...",
+    "host_name": "forum.playcanvas.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.playcanvas.com/user-manual/api/scene-list",
+    "name": "Scenes - List scenes - PlayCanvas Developer Site",
+    "snippet": "List all scenes in a project for a given branch id using GET projects/:projectId/scenes with authentication and response schema.",
+    "host_name": "developer.playcanvas.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forum.playcanvas.com/t/visual-studio-code-extension-for-playcanvas/35611",
+    "name": "Visual Studio Code Extension for PlayCanvas - Announcements",
+    "snippet": "We're excited to announce the availability of the new Visual Studio Code Extension for PlayCanvas.",
+    "host_name": "forum.playcanvas.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=a144QF-xE1I",
+    "name": "PlayCanvas - Using Engine example code in Editor project - YouTube",
+    "snippet": "Office Hours is where we work through problems from our community Today's forum thread is: \"Mesh deformation in PlayCanvas\" ...",
+    "host_name": "www.youtube.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
