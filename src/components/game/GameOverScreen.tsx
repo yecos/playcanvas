@@ -12,7 +12,6 @@ export function GameOverScreen({ score, crystalsCollected, totalCrystals, won, o
   return (
     <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="text-center px-8 max-w-sm">
-        {/* Result icon */}
         <div className="mb-6">
           <div className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center shadow-lg ${
             won
@@ -23,7 +22,6 @@ export function GameOverScreen({ score, crystalsCollected, totalCrystals, won, o
           </div>
         </div>
 
-        {/* Title */}
         <h1 className="text-3xl font-black text-white mb-2">
           {won ? '¡Victoria!' : '¡Se acabó el tiempo!'}
         </h1>
@@ -31,7 +29,6 @@ export function GameOverScreen({ score, crystalsCollected, totalCrystals, won, o
           {won ? 'Recogiste todos los cristales' : 'No recogiste todos los cristales a tiempo'}
         </p>
 
-        {/* Stats */}
         <div className="bg-white/5 rounded-xl p-5 mb-8 border border-white/10 space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-white/50 text-sm">Puntuación</span>
@@ -55,7 +52,6 @@ export function GameOverScreen({ score, crystalsCollected, totalCrystals, won, o
           )}
         </div>
 
-        {/* Restart Button */}
         <button
           onClick={onRestart}
           className="w-full py-4 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-orange-500/30 active:scale-95 transition-all duration-150"

@@ -14,13 +14,11 @@ export function Hud({ score, timeLeft, crystalsCollected, totalCrystals }: HudPr
   return (
     <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
       <div className="flex justify-between items-start p-4 gap-3">
-        {/* Score */}
         <div className="bg-black/50 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10">
           <p className="text-white/50 text-xs font-medium uppercase tracking-wider">Puntos</p>
           <p className="text-2xl font-bold text-orange-400">{score}</p>
         </div>
 
-        {/* Crystals */}
         <div className="bg-black/50 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10 flex-shrink-0">
           <p className="text-white/50 text-xs font-medium uppercase tracking-wider">Cristales</p>
           <p className="text-2xl font-bold text-cyan-400">
@@ -29,7 +27,6 @@ export function Hud({ score, timeLeft, crystalsCollected, totalCrystals }: HudPr
           </p>
         </div>
 
-        {/* Timer */}
         <div className={`bg-gradient-to-br ${timeBg} backdrop-blur-md rounded-xl px-4 py-2 border border-white/10`}>
           <p className="text-white/50 text-xs font-medium uppercase tracking-wider">Tiempo</p>
           <p className={`text-2xl font-bold ${timeColor}`}>

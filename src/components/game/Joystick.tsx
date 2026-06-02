@@ -27,7 +27,6 @@ export function Joystick({ onMove }: JoystickProps) {
 
     knobRef.current.style.transform = `translate(${knobX}px, ${knobY}px)`
 
-    // Normalize to -1 to 1
     const normX = knobX / maxDist
     const normY = knobY / maxDist
     onMove(normX, normY)
@@ -89,13 +88,11 @@ export function Joystick({ onMove }: JoystickProps) {
 
   return (
     <div className="absolute bottom-8 left-8 z-30 select-none">
-      {/* Direction labels */}
       <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-white/40 text-xs font-bold">▲</div>
       <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-xs font-bold">▼</div>
       <div className="absolute top-1/2 -left-5 -translate-y-1/2 text-white/40 text-xs font-bold">◄</div>
       <div className="absolute top-1/2 -right-5 -translate-y-1/2 text-white/40 text-xs font-bold">►</div>
 
-      {/* Joystick base */}
       <div
         ref={baseRef}
         className="w-32 h-32 rounded-full bg-white/10 border-2 border-white/20 backdrop-blur-sm flex items-center justify-center cursor-pointer"
@@ -103,7 +100,6 @@ export function Joystick({ onMove }: JoystickProps) {
         onMouseDown={handleStart}
         style={{ touchAction: 'none' }}
       >
-        {/* Joystick knob */}
         <div
           ref={knobRef}
           className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-white/30 shadow-lg shadow-orange-500/30 transition-transform duration-75"
@@ -111,7 +107,6 @@ export function Joystick({ onMove }: JoystickProps) {
         />
       </div>
 
-      {/* Label */}
       <p className="text-white/30 text-xs text-center mt-6 font-medium">MOVER</p>
     </div>
   )

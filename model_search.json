@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/superpowers/superpowers-game/issues/155",
+    "name": "Problems With 3D Model Animation Downloaded From Mixamo #155",
+    "snippet": "I looked at DANCE ANIMATION from mixamo/thriller_part_3.gltf (it's JSON), and the animations contains an empty object so the glTF converter somehow loses the ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.mixamo.com",
+    "name": "Mixamo",
+    "snippet": "Bring your projects to life with 3D characters, skeletal rigs, and animations, ready for use in film, games, interactive experiences and illustration.",
+    "host_name": "www.mixamo.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/ccalafiore/Mixamo-Bot-that-Automatically-Downloads-Mixamo-Data",
+    "name": "ccalafiore/Mixamo-Bot-that-Automatically-Downloads-Mixamo-Data",
+    "snippet": "The scripts of this project automatically download the 3d bodies of some characters and the 3d animations as FBX files from Mixamo's website.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/threejs/comments/1p9cwh2/built_my_own_mixamo_animation_merger_no_blender",
+    "name": "Built my own Mixamo Animation Merger - No Blender - No Plugins",
+    "snippet": "\"Mixamo2GLBAnimationMerger is an automated pipeline for converting and merging character animations for web applications. It converts FBX files ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GcXo26tF1_g",
+    "name": "Free Animated 3D-Characters! (Mixamo & Blender) - YouTube",
+    "snippet": "... Free Resources: https://blenderdaily.xyz/free Video Instructor: Nik Kottmann Instagram: https://www.instagram.com/nikkottmann/ Website ...",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://hub.jmonkeyengine.org/t/converting-mixamo-3d-models-from-fbx-to-gltf/45090",
+    "name": "Converting Mixamo 3D models from fbx to gltf - jMonkeyEngine Hub",
+    "snippet": "AnyConv is a five-star FBX to GLTF converter. Change fbx to gltf format in batch. Fast and free. No software installation required.",
+    "host_name": "hub.jmonkeyengine.org",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://nilooy.github.io/character-animation-combiner",
+    "name": "Character Animation Combiner",
+    "snippet": "Upload File with Character. (.fbx / .gltf /.glb). Upload File. Upload Animations (.fbx). Upload File. Export. Export GLTF Export GLB. Change Texture.",
+    "host_name": "nilooy.github.io",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/8thwall/web/blob/master/examples/aframe/animation-mixer/mixamo-animated-lowpoly.glb",
+    "name": "mixamo-animated-lowpoly.glb - aframe - GitHub",
+    "snippet": "Download raw file. Edit and raw actions. View raw. Footer. © 2026 GitHub, Inc. Footer navigation. Terms · Privacy · Security · Status ...",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=aJrThtp4j0A",
+    "name": "Importing Mixamo animations into cables - GLTF Scene Operator",
+    "snippet": "In our latest cables update we improved rigged 3d model imports. You can drag and drop GLTF or FBX files into the editor and quickly animate ...",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://simlab-soft.com/blog/mixamo-free-3d-animated-characters",
+    "name": "Mixamo : Free 3D Animated Characters • SimLab Soft Blog",
+    "snippet": "Mixamo is a great source for downloading 3D animated characters, it has a huge library, and it allows you to download models as FBX files for free.",
+    "host_name": "simlab-soft.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
