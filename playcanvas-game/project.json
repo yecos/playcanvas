@@ -1,0 +1,154 @@
+{
+  "name": "Arboleda: La Maldición del Bosque",
+  "description": "Prototipo jugable - Juego de aventura y exploración 3D en el Bosque Antiguo. Recoge las 4 reliquias elementales para romper la maldición.",
+  "version": "0.1.0",
+  "engine": "playcanvas",
+  "genre": "Aventura / Exploracion 3D",
+  "perspective": "third_person",
+  "scripts": [
+    "scripts/gameManager.js",
+    "scripts/playerController.js",
+    "scripts/cameraFollow.js",
+    "scripts/enemyAI.js",
+    "scripts/relicSystem.js",
+    "scripts/dayNightCycle.js",
+    "scripts/touchControls.js",
+    "scripts/vfxSystem.js",
+    "scripts/environmentGenerator.js"
+  ],
+  "sceneHierarchy": {
+    "Root": {
+      "Camera": {
+        "components": ["camera", "cameraFollow", "touchControls"],
+        "camera": {
+          "fov": 60,
+          "near": 0.1,
+          "far": 1000,
+          "clearColor": [0.05, 0.08, 0.12, 1]
+        }
+      },
+      "DirectionalLight": {
+        "components": ["light"],
+        "light": {
+          "type": "directional",
+          "color": [1, 0.95, 0.9],
+          "intensity": 1.5,
+          "castShadows": true,
+          "shadowDistance": 50,
+          "shadowResolution": 2048
+        },
+        "rotation": [-45, 30, 0]
+      },
+      "AmbientLight": {
+        "components": ["light"],
+        "light": {
+          "type": "point",
+          "color": [0.3, 0.3, 0.5],
+          "intensity": 0.5,
+          "range": 100
+        },
+        "position": [0, 15, 0]
+      },
+      "Player": {
+        "components": ["model", "animation", "playerController", "collision", "rigidbody"],
+        "model": { "type": "asset", "assetName": "fox" },
+        "animation": { "speed": 1 },
+        "collision": { "type": "capsule", "radius": 0.5, "height": 2 },
+        "rigidbody": {
+          "type": "dynamic",
+          "mass": 70,
+          "friction": 0.8,
+          "linearDamping": 0.9,
+          "angularDamping": 0.99,
+          "angularFactor": [0, 0, 0]
+        },
+        "position": [0, 1, 0],
+        "tags": ["player"]
+      },
+      "GameManager": {
+        "components": ["gameManager"]
+      },
+      "VFXSystem": {
+        "components": ["vfxSystem"]
+      },
+      "EnvironmentGenerator": {
+        "components": ["environmentGenerator"]
+      },
+      "RelicSystem": {
+        "components": ["relicSystem"]
+      },
+      "DayNightCycle": {
+        "components": ["dayNightCycle"]
+      },
+      "Enemies": {
+        "Wolf_1": {
+          "components": ["model", "enemyAI", "collision", "rigidbody"],
+          "model": { "type": "box" },
+          "enemyAI": { "enemyType": "wolf" },
+          "position": [12, 0.5, 8],
+          "tags": ["enemy"]
+        },
+        "Wolf_2": {
+          "components": ["model", "enemyAI", "collision", "rigidbody"],
+          "model": { "type": "box" },
+          "enemyAI": { "enemyType": "wolf" },
+          "position": [-10, 0.5, -12],
+          "tags": ["enemy"]
+        },
+        "Wolf_3": {
+          "components": ["model", "enemyAI", "collision", "rigidbody"],
+          "model": { "type": "box" },
+          "enemyAI": { "enemyType": "wolf" },
+          "position": [8, 0.5, -15],
+          "tags": ["enemy"]
+        },
+        "Golem_1": {
+          "components": ["model", "enemyAI", "collision", "rigidbody"],
+          "model": { "type": "box" },
+          "enemyAI": { "enemyType": "golem", "maxHealth": 120, "moveSpeed": 1.5, "chaseSpeed": 3, "attackDamage": 20 },
+          "position": [-15, 0.5, 5],
+          "tags": ["enemy"]
+        },
+        "Shadow_1": {
+          "components": ["model", "enemyAI", "collision", "rigidbody"],
+          "model": { "type": "box" },
+          "enemyAI": { "enemyType": "shadow", "maxHealth": 30, "moveSpeed": 5, "chaseSpeed": 7, "attackDamage": 8 },
+          "position": [0, 0.5, -20],
+          "tags": ["enemy"]
+        }
+      }
+    }
+  },
+  "controls": {
+    "keyboard": {
+      "W/Up": "Mover adelante",
+      "S/Down": "Mover atrás",
+      "A/Left": "Mover izquierda",
+      "D/Right": "Mover derecha",
+      "Shift": "Correr",
+      "Space": "Esquiva",
+      "J/LeftClick": "Atacar",
+      "1": "Habilidad Agua",
+      "2": "Habilidad Fuego",
+      "3": "Habilidad Tierra",
+      "4": "Habilidad Aire",
+      "RightClick+Drag": "Rotar cámara",
+      "MouseWheel": "Zoom"
+    },
+    "touch": {
+      "Joystick izquierdo": "Movimiento",
+      "Botón ⚔": "Atacar",
+      "Botón ↺": "Esquiva",
+      "Botones elementales": "Habilidades",
+      "Dos dedos": "Rotar cámara"
+    }
+  },
+  "gameFlow": {
+    "start": "El jugador aparece en el claro central del Bosque Antiguo",
+    "objective": "Encontrar y recolectar las 4 reliquias elementales",
+    "progression": "Cada reliquia otorga una habilidad elemental nueva",
+    "enemies": "Lobos sombra patrullan el bosque, se vuelven más agresivos de noche",
+    "victory": "Recolectar las 4 reliquias para completar el prototipo",
+    "failure": "La vida llega a 0 o se agota el tiempo"
+  }
+}
