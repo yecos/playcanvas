@@ -96,15 +96,25 @@ echo  OK: Git detectado.
 REM ---- Verificar NVIDIA ----
 echo  Verificando GPU NVIDIA...
 nvidia-smi >nul 2>&1
-if errorlevel 1 (
-    echo  ADVERTENCIA: No se detecto GPU NVIDIA o drivers incompletos.
-    echo  ComfyUI funcionara en modo CPU (MUY lento).
-    set /p CONFIRM="Continuar de todos modos? (s/N): "
-    if /i not "!CONFIRM!"=="s" exit /b 1
-) else (
-    echo  OK: GPU NVIDIA detectada.
-    nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+if errorlevel 1 goto nvidia_not_found
+
+REM NVIDIA presente - mostrar info
+echo  OK: GPU NVIDIA detectada.
+nvidia-smi --query-gpu^=name,memory.total --format^=csv,noheader 2>nul
+goto nvidia_done
+
+:nvidia_not_found
+echo  ADVERTENCIA: No se detecto GPU NVIDIA o drivers incompletos.
+echo  ComfyUI funcionara en modo CPU ^(MUY lento^).
+if /i "!FORCE!"=="YES" (
+    echo  Continuando por modo --force...
+    goto nvidia_done
 )
+set "CONFIRM=N"
+set /p "CONFIRM=Continuar de todos modos? (s/N): "
+if /i not "!CONFIRM!"=="s" exit /b 1
+
+:nvidia_done
 
 REM ---- 1. ComfyUI Check System (Python script) ----
 echo.
