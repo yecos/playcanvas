@@ -1,0 +1,18 @@
+[Unit]
+Description=ComfyUI Social Suite - All services auto-start
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+User=%i
+WorkingDirectory=/home/%i/comfyui-social
+ExecStart=/home/%i/comfyui-social/start_all.sh
+ExecStop=/home/%i/comfyui-social/stop_all.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/home/%i/comfyui-social/logs/systemd.log
+StandardError=append:/home/%i/comfyui-social/logs/systemd-error.log
+
+[Install]
+WantedBy=multi-user.target

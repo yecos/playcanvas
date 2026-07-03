@@ -33,7 +33,12 @@ echo    8. Workflows preconfigurados
 echo.
 echo  Tiempo estimado: 30-90 minutos segun conexion.
 echo.
-pause
+REM Modo automatico: si se pasa --yes, no preguntar
+set "AUTO=YES"
+if /i "%1"=="--yes" set "AUTO=YES"
+if /i not "%1"=="--yes" (
+    pause
+)
 
 REM ---- 0. Verificar Python ----
 echo.
@@ -133,8 +138,7 @@ python -c "import torch; assert torch.cuda.is_available(), 'CUDA NO disponible. 
 if errorlevel 1 (
     echo  ADVERTENCIA: CUDA no disponible. ComfyUI funcionara en modo CPU (muy lento).
     echo  Solucion: actualiza driver NVIDIA desde https://www.nvidia.com/Download/index.aspx
-    set /p CONFIRM_CPU="Continuar de todos modos? (s/N): "
-    if /i not "!CONFIRM_CPU!"=="s" exit /b 1
+    echo  Continuando de todos modos en modo CPU...
 ) else (
     echo  OK: CUDA verificado.
 )
@@ -185,16 +189,16 @@ echo  Este paso es el mas largo. Se mostrara progreso.
 echo  Si falla, puedes reanudar ejecutando:
 echo    python scripts\download_models.py --retry
 echo.
-echo  IMPORTANTE: Juggernaut XL requiere token de CivitAI (gratis).
-echo  Registrate en https://civitai.com y crea API key en Account Settings.
-set /p CIVITAI="Pega tu CivitAI API key (o Enter para saltar): "
-if not "!CIVITAI!"=="" (
-    set "CIVITAI_TOKEN=!CIVITAI!"
+REM CivitAI token: leer de variable de entorno si existe, si no, saltar
+if defined CIVITAI_TOKEN (
+    echo  CIVITAI_TOKEN detectado en entorno.
+) else (
+    echo  NOTA: Juggernaut XL requiere token CivitAI (gratis).
+    echo  Si falla la descarga, registrate en https://civitai.com,
+    echo  crea API key y ejecuta: set CIVITAI_TOKEN=tu_token ^&^& python scripts\download_models.py --retry
 )
-set /p DL="Descargar modelos ahora? (S/n): "
-if /i not "!DL!"=="n" (
-    python scripts\download_models.py
-)
+REM Descarga automatica (sin prompt)
+python scripts\download_models.py
 
 REM ---- Copiar extra_model_paths.yaml a ComfyUI ----
 if exist "config\extra_model_paths.yaml" (
@@ -227,21 +231,37 @@ echo.
 echo  Aplicando tema de marca a ComfyUI...
 python scripts\apply_theme.py
 
+REM ---- Validacion post-instalacion ----
+echo.
+echo  ============================================================
+echo   VALIDACION POST-INSTALACION
+echo  ============================================================
+python scripts\post_install.py
+
+REM ---- Preguntar si iniciar todo ahora ----
+echo.
+set /p START_NOW="Iniciar todos los servicios ahora? (S/n): "
+if /i not "!START_NOW!"=="n" (
+    echo.
+    echo  Iniciando todos los servicios...
+    call start_all.bat
+    exit /b 0
+)
+
 REM ---- Final ----
 echo.
 echo  ============================================================
 echo   INSTALACION COMPLETA
 echo  ============================================================
 echo.
-echo  Para iniciar ComfyUI:
-echo    1. Haz doble clic en start.bat
-echo    2. Se abrira el navegador en http://127.0.0.1:8188
+echo  Para iniciar TODO automatico:
+echo    Doble clic en start_all.bat
 echo.
-echo  Para actualizar:
-echo    Doble clic en update.bat
+echo  Para detener todo:
+echo    Doble clic en stop_all.bat
 echo.
-echo  Para desinstalar:
-echo    Doble clic en uninstall.bat
+echo  Dashboard de estado:
+echo    http://127.0.0.1:8080 (despues de iniciar)
 echo.
 echo  Documentacion en la carpeta docs\
 echo.

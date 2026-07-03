@@ -36,7 +36,14 @@ echo "    8. Workflows preconfigurados"
 echo ""
 echo "  Tiempo estimado: 30-90 minutos segun conexion."
 echo ""
-read -p "Presiona ENTER para continuar o Ctrl+C para cancelar..."
+# Modo automatico: si se pasa --yes, no preguntar
+AUTO_CONFIRM=false
+if [[ "$1" == "--yes" ]]; then
+    AUTO_CONFIRM=true
+fi
+if [[ "$AUTO_CONFIRM" != "true" ]]; then
+    read -p "Presiona ENTER para continuar o Ctrl+C para cancelar..."
+fi
 
 # ---- 0. Verificar Python ----
 echo ""
@@ -117,8 +124,7 @@ echo "  Verificando CUDA..."
 python -c "import torch; assert torch.cuda.is_available(), 'CUDA NO disponible. Reinstala driver NVIDIA.'; print(f'CUDA OK: {torch.cuda.get_device_name(0)}')" || {
     echo -e "${YELLOW}ADVERTENCIA:${NC} CUDA no disponible. ComfyUI funcionara en modo CPU (muy lento)."
     echo "  Solucion: actualiza driver NVIDIA desde https://www.nvidia.com/Download/index.aspx"
-    read -p "  Continuar de todos modos? (s/N): " CONFIRM_CPU
-    if [[ ! "$CONFIRM_CPU" =~ ^[sS]$ ]]; then exit 1; fi
+    echo "  Continuando de todos modos en modo CPU..."
 }
 echo -e "  ${GREEN}OK:${NC} PyTorch instalado."
 
@@ -162,16 +168,17 @@ echo "  Este paso es el mas largo. Se mostrara progreso."
 echo "  Si falla, puedes reanudar ejecutando:"
 echo "    python scripts/download_models.py --retry"
 echo ""
-echo "  IMPORTANTE: Juggernaut XL requiere token de CivitAI (gratis)."
-echo "  Registrate en https://civitai.com y crea API key en Account Settings."
-read -p "  Pega tu CivitAI API key (o Enter para saltar): " CIVITAI_KEY
-if [[ -n "$CIVITAI_KEY" ]]; then
-    export CIVITAI_TOKEN="$CIVITAI_KEY"
+# CivitAI token: si esta en entorno, usarlo; si no, mostrar nota y continuar
+if [[ -n "$CIVITAI_TOKEN" ]]; then
+    echo -e "  ${GREEN}CIVITAI_TOKEN detectado en entorno.${NC}"
+else
+    echo -e "  ${YELLOW}NOTA:${NC} Juggernaut XL requiere token CivitAI (gratis)."
+    echo "  Si falla la descarga, registrate en https://civitai.com,"
+    echo "  crea API key y ejecuta:"
+    echo "    export CIVITAI_TOKEN=tu_token && python scripts/download_models.py --retry"
 fi
-read -p "  Descargar modelos ahora? (S/n): " DL
-if [[ ! "$DL" =~ ^[nN]$ ]]; then
-    python scripts/download_models.py || echo -e "${YELLOW}Algunos modelos pudieron fallar. Reejecuta con --retry${NC}"
-fi
+# Descarga automatica (sin prompt)
+python scripts/download_models.py || echo -e "${YELLOW}Algunos modelos pudieron fallar. Reejecuta con --retry${NC}"
 
 # Copiar extra_model_paths.yaml a ComfyUI
 if [ -f "config/extra_model_paths.yaml" ] && [ ! -f "ComfyUI/extra_model_paths.yaml" ]; then
@@ -202,18 +209,42 @@ echo ""
 echo "  Aplicando tema de marca a ComfyUI..."
 python scripts/apply_theme.py
 
+# Validacion post-instalacion
+echo ""
+echo " ============================================================"
+echo "  VALIDACION POST-INSTALACION"
+echo " ============================================================"
+python scripts/post_install.py
+
+# Preguntar si iniciar todo ahora
+echo ""
+if [[ "$AUTO_CONFIRM" == "true" ]]; then
+    START_NOW="s"
+else
+    read -p "Iniciar todos los servicios ahora? (S/n): " START_NOW
+fi
+if [[ ! "$START_NOW" =~ ^[nN]$ ]]; then
+    echo ""
+    echo "  Iniciando todos los servicios..."
+    chmod +x start_all.sh stop_all.sh 2>/dev/null || true
+    ./start_all.sh
+    exit 0
+fi
+
 # ---- Final ----
 echo ""
 echo " ============================================================"
 echo "  INSTALACION COMPLETA"
 echo " ============================================================"
 echo ""
-echo "  Para iniciar ComfyUI:"
-echo "    ./start.sh"
-echo "    Luego abre http://127.0.0.1:8188"
+echo "  Para iniciar TODO automatico:"
+echo "    ./start_all.sh"
 echo ""
-echo "  Para actualizar:  ./update.sh"
-echo "  Para desinstalar: ./uninstall.sh"
+echo "  Para detener todo:"
+echo "    ./stop_all.sh"
+echo ""
+echo "  Dashboard de estado:"
+echo "    http://127.0.0.1:8080 (despues de iniciar)"
 echo ""
 echo "  Documentacion en la carpeta docs/"
 echo ""
