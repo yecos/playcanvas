@@ -285,10 +285,11 @@ def main():
     banner("RESUMEN")
     passed = sum(1 for _, r in results if r)
     total = len(results)
+    RESET = '\033[0m'
     for name, ok_flag in results:
         marker = "OK" if ok_flag else "FAIL"
         color = '\033[92m' if ok_flag else '\033[91m'
-        cprint(f"  [{color}{marker}{'\033[0m'}] {name}")
+        cprint(f"  [{color}{marker}{RESET}] {name}")
 
     print()
     if passed == total:
