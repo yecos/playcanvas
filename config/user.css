@@ -1,0 +1,290 @@
+/* ============================================================
+   ComfyUI Social Media Suite - Brand user.css
+   ============================================================
+   Instalar: copiar este archivo a ComfyUI/user/default/user.css
+   Requiere: ComfyUI >= 1.20.5 (nuevo frontend)
+
+   Personaliza:
+   - Tipografia moderna (Inter para UI, JetBrains Mono para codigo)
+   - Bordes redondeados
+   - Sombras suaves
+   - Animaciones en hover
+   - Mejor contraste
+   ============================================================ */
+
+/* ---- Importar fuentes de Google (solo si hay internet) ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---- Variables de marca ---- */
+:root {
+  --suite-bg-primary: #1A1A2E;
+  --suite-bg-secondary: #16213E;
+  --suite-bg-card: #2D2D44;
+  --suite-bg-hover: #3C3C5C;
+  --suite-text-primary: #F0E6D2;
+  --suite-text-muted: #B5A642;
+  --suite-accent: #FFB266;
+  --suite-accent-hover: #FFA931;
+  --suite-success: #3a784e;
+  --suite-error: #aa534b;
+  --suite-info: #4a749e;
+  --suite-border: #3C3C5C;
+  --suite-radius: 8px;
+  --suite-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --suite-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --suite-font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --suite-font-mono: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+}
+
+/* ---- Body / fondo general ---- */
+body, html {
+  font-family: var(--suite-font-ui) !important;
+  background: var(--suite-bg-primary) !important;
+  color: var(--suite-text-primary) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Menu superior (top bar) ---- */
+.comfyui-menu {
+  background: var(--suite-bg-secondary) !important;
+  border-bottom: 1px solid var(--suite-border) !important;
+  box-shadow: var(--suite-shadow) !important;
+  backdrop-filter: blur(10px);
+}
+
+.comfyui-menu button {
+  font-family: var(--suite-font-ui) !important;
+  font-weight: 500 !important;
+  border-radius: var(--suite-radius) !important;
+  transition: all 0.2s ease !important;
+}
+
+.comfyui-menu button:hover {
+  background: var(--suite-bg-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* ---- Botones genericos ---- */
+.comfy-btn, button {
+  border-radius: var(--suite-radius) !important;
+  transition: all 0.2s ease !important;
+}
+
+.comfy-btn:hover, button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--suite-shadow) !important;
+}
+
+/* ---- Dialogos modales ---- */
+.comfy-modal, .pysssss-dialog, [class*="dialog"], [class*="modal"] {
+  background: var(--suite-bg-secondary) !important;
+  border: 1px solid var(--suite-border) !important;
+  border-radius: var(--suite-radius) !important;
+  box-shadow: var(--suite-shadow-lg) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* ---- Paneles laterales (sidebar) ---- */
+.comfyui-body-left, .comfyui-body-right {
+  background: var(--suite-bg-secondary) !important;
+  border-right: 1px solid var(--suite-border) !important;
+}
+
+/* ---- Lista de nodes / buscador ---- */
+.lite-search-item {
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+  transition: all 0.15s ease !important;
+}
+
+.lite-search-item:hover {
+  background: var(--suite-bg-hover) !important;
+  color: var(--suite-accent) !important;
+}
+
+/* ---- Inputs y textareas ---- */
+input, textarea, select {
+  font-family: var(--suite-font-ui) !important;
+  background: var(--suite-bg-card) !important;
+  border: 1px solid var(--suite-border) !important;
+  border-radius: var(--suite-radius) !important;
+  color: var(--suite-text-primary) !important;
+  padding: 6px 10px !important;
+  transition: all 0.15s ease !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--suite-accent) !important;
+  box-shadow: 0 0 0 2px rgba(255, 178, 102, 0.2) !important;
+  outline: none !important;
+}
+
+/* ---- Prompts (CLIPTextEncode) - fuente monoespaciada ---- */
+textarea.comfy-multiline-input {
+  font-family: var(--suite-font-mono) !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  background: var(--suite-bg-card) !important;
+  border: 1px solid var(--suite-border) !important;
+  border-radius: var(--suite-radius) !important;
+}
+
+/* ---- Queue / status indicators ---- */
+.comfy-queue-badge {
+  border-radius: var(--suite-radius) !important;
+  font-weight: 600 !important;
+}
+
+.comfy-queue-badge.running {
+  background: var(--suite-success) !important;
+  color: var(--suite-text-primary) !important;
+}
+
+.comfy-queue-badge.queued {
+  background: var(--suite-accent) !important;
+  color: var(--suite-bg-primary) !important;
+}
+
+/* ---- Tabs ---- */
+.comfyui-tab {
+  border-radius: var(--suite-radius) var(--suite-radius) 0 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.comfyui-tab.active {
+  background: var(--suite-bg-card) !important;
+  border-bottom: 2px solid var(--suite-accent) !important;
+}
+
+/* ---- ComfyUI-Manager styling ---- */
+.comfyui-manager-dialog {
+  background: var(--suite-bg-secondary) !important;
+  border-radius: var(--suite-radius) !important;
+}
+
+.comfyui-manager-dialog .manager-table tr:hover {
+  background: var(--suite-bg-hover) !important;
+}
+
+/* ---- Tooltips ---- */
+.litegraph .tooltip {
+  background: var(--suite-bg-secondary) !important;
+  color: var(--suite-text-primary) !important;
+  border: 1px solid var(--suite-border) !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  box-shadow: var(--suite-shadow) !important;
+}
+
+/* ---- Scrollbar moderna ---- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--suite-bg-secondary) !important;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--suite-bg-hover) !important;
+  border-radius: 5px;
+  border: 2px solid var(--suite-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--suite-accent) !important;
+}
+
+/* ---- Branding badge (esquina inferior derecha) ---- */
+.comfyui-body::after {
+  content: "ComfyUI Social Suite";
+  position: fixed;
+  bottom: 8px;
+  right: 12px;
+  font-family: var(--suite-font-ui);
+  font-size: 10px;
+  color: var(--suite-text-muted);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ---- Animacion suave al cargar ---- */
+@keyframes suiteFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.comfy-modal, .pysssss-dialog {
+  animation: suiteFadeIn 0.2s ease-out;
+}
+
+/* ---- Badges de estado (success/error/warning) ---- */
+.badge-success, .status-success {
+  background: var(--suite-success) !important;
+  color: var(--suite-text-primary) !important;
+  border-radius: var(--suite-radius) !important;
+}
+
+.badge-error, .status-error {
+  background: var(--suite-error) !important;
+  color: var(--suite-text-primary) !important;
+  border-radius: var(--suite-radius) !important;
+}
+
+.badge-warning, .status-warning {
+  background: var(--suite-info) !important;
+  color: var(--suite-text-primary) !important;
+  border-radius: var(--suite-radius) !important;
+}
+
+/* ---- Image Feed (ComfyUI-Custom-Scripts) ---- */
+.comfy-image-feed {
+  border-radius: var(--suite-radius) !important;
+  box-shadow: var(--suite-shadow) !important;
+}
+
+.comfy-image-feed img {
+  border-radius: 4px !important;
+}
+
+/* ---- Svelte components (nuevo frontend) ---- */
+.svelte-node {
+  border-radius: var(--suite-radius) !important;
+  box-shadow: var(--uite-shadow) !important;
+}
+
+/* ---- Node title bar (mas legible) ---- */
+.litegraph .node .title-text {
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+}
+
+/* ---- Save button (resaltar) ---- */
+.comfyui-menu button.primary {
+  background: var(--suite-accent) !important;
+  color: var(--suite-bg-primary) !important;
+  font-weight: 600 !important;
+}
+
+.comfyui-menu button.primary:hover {
+  background: var(--suite-accent-hover) !important;
+}
+
+/* ---- Notifications/toasts ---- */
+.comfy-toast, [class*="toast"] {
+  border-radius: var(--suite-radius) !important;
+  box-shadow: var(--suite-shadow-lg) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* ---- Responsive: ocultar branding en pantallas pequenas ---- */
+@media (max-width: 768px) {
+  .comfyui-body::after {
+    display: none;
+  }
+}

@@ -4,6 +4,10 @@
 # ============================================================
 # Documentacion completa: https://docs.comfy.org/
 
+# --- Nuevo frontend (Vue 3 + Svelte, default desde nov 2024) ---
+# Mas moderno, mejor UX, soporta user.css, Nodes 2.0, sidebar flotante
+--front-end-version Comfy-Org/ComfyUI_frontend@latest
+
 # --- Metodo de preview ---
 --preview-method auto
 

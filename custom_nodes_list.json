@@ -104,6 +104,18 @@
       "url": "https://github.com/ltdrdata/ComfyUI-BiRefNet.git",
       "required": false,
       "description": "Background removal de alta calidad para product photography"
+    },
+    {
+      "name": "ComfyUI-Niutonian-Themes",
+      "url": "https://github.com/Niutonian/ComfyUI-Niutonian-Themes.git",
+      "required": false,
+      "description": "10 temas modernos (Modern Dark, Glassmorphism, Neon Glow, Cyberpunk, etc.) con Nodes 2.0 support"
+    },
+    {
+      "name": "ComfyUI-Custom-Scripts",
+      "url": "https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git",
+      "required": false,
+      "description": "Image Feed, custom colors por nodo, favicon status, mejoras de UI"
     }
   ]
 }

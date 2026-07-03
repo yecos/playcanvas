@@ -197,6 +197,11 @@ echo ""
 echo "  Inicializando configuracion (.env, calendar.json)..."
 python scripts/init_config.py
 
+# Aplicar tema de marca a ComfyUI
+echo ""
+echo "  Aplicando tema de marca a ComfyUI..."
+python scripts/apply_theme.py
+
 # ---- Final ----
 echo ""
 echo " ============================================================"
