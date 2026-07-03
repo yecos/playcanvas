@@ -36,8 +36,12 @@ echo.
 REM Modo automatico: si se pasa --yes, no preguntar
 set "AUTO=YES"
 if /i "%1"=="--yes" set "AUTO=YES"
+if /i "%1"=="--force" set "AUTO=YES"
+if /i "%1"=="--force" set "FORCE=YES"
 if /i not "%1"=="--yes" (
-    pause
+    if /i not "%1"=="--force" (
+        pause
+    )
 )
 
 REM ---- 0. Verificar Python ----
@@ -53,16 +57,28 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM ---- Ejecutar check_prerequisites.py ----
+REM ---- Ejecutar check_prerequisites.py (a menos que --force) ----
+if /i "!FORCE!"=="YES" (
+    echo  SKIP: check_prerequisites omitido por --force
+    goto skip_prereq_check
+)
 echo  Verificando prerrequisitos del sistema...
 python scripts\check_prerequisites.py
+REM Exit code 0 = OK o solo warnings (puede continuar)
+REM Exit code 1 = fallos criticos (no puede continuar)
 if errorlevel 1 (
     echo.
-    echo  ERROR: Prerrequisitos no cumplidos.
-    echo  Ejecuta bootstrap.bat para instalarlos automaticamente.
+    echo  ERROR: Hay fallos criticos en los prerrequisitos.
+    echo  Ejecuta bootstrap.bat para intentar auto-instalarlos.
+    echo.
+    echo  Si ya ejecutaste bootstrap y persiste, puedes forzar la instalacion con:
+    echo    install.bat --force
+    echo.
     pause
     exit /b 1
 )
+echo  OK: Prerrequisitos verificados ^(puede haber warnings, no criticos^).
+:skip_prereq_check
 for /f "tokens=2" %%i in ('python --version 2^>^&1') do set PYVER=%%i
 echo  OK: Python !PYVER! detectado.
 

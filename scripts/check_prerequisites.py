@@ -190,28 +190,44 @@ def check_build_tools() -> Tuple[bool, str, str]:
 
 
 def check_internet() -> Tuple[bool, str, str, Dict]:
-    """Conectividad a internet y servicios clave."""
+    """Conectividad a internet y servicios clave.
+
+    GitHub y PyPI son CRITICOS (sin ellos no se puede instalar nada).
+    HuggingFace, CivitAI, PyTorch son WARNING (modelos se descargan despues).
+    """
     services = {
-        "GitHub": "github.com",
-        "HuggingFace": "huggingface.co",
-        "CivitAI": "civitai.com",
-        "PyPI": "pypi.org",
-        "PyTorch": "download.pytorch.org",
+        "GitHub": "github.com",        # critico - clonar ComfyUI
+        "HuggingFace": "huggingface.co",  # warning - modelos
+        "CivitAI": "civitai.com",       # warning - Juggernaut XL
+        "PyPI": "pypi.org",            # critico - paquetes Python
+        "PyTorch": "download.pytorch.org",  # warning - PyTorch CUDA
     }
+    critical_services = {"GitHub", "PyPI"}
     results = {}
-    all_ok = True
+    all_critical_ok = True
+    failed = []
+    failed_critical = []
+
     for name, host in services.items():
         try:
             socket.gethostbyname(host)
             results[name] = True
         except socket.gaierror:
             results[name] = False
-            all_ok = False
+            failed.append(name)
+            if name in critical_services:
+                all_critical_ok = False
+                failed_critical.append(name)
 
-    if all_ok:
+    if all_critical_ok:
+        if failed:
+            # Solo fallaron servicios no criticos (HuggingFace, CivitAI, PyTorch)
+            msg = f"Sin acceso a: {', '.join(failed)} (no critico, modelos se descargan despues)"
+            return True, msg, "WARNING - modelos pueden fallar al descargar", results
         return True, "Todos los servicios accesibles", "OK", results
-    failed = [k for k, v in results.items() if not v]
-    return False, "Sin acceso a: " + ", ".join(failed), "Verifica DNS / firewall / VPN", results
+
+    # Fallaron servicios criticos
+    return False, f"Sin acceso CRITICO a: {', '.join(failed_critical)}", "Verifica DNS / firewall / VPN", results
 
 
 def check_ports() -> Tuple[bool, str, str, Dict]:

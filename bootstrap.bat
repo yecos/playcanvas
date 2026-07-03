@@ -232,7 +232,13 @@ if "!BOOTSTRAP_OK!"=="1" (
 )
 
 REM ============================================================
-REM Funciones auxiliares
+REM Final del script principal. Las funciones auxiliares abajo NO
+REM deben ejecutarse secuencialmente, por eso salimos con goto :EOF.
+REM ============================================================
+goto :EOF
+
+REM ============================================================
+REM Funciones auxiliares (no se ejecutan al llegar aqui)
 REM ============================================================
 
 :install_python
