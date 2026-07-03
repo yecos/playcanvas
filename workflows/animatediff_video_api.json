@@ -1,0 +1,117 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "dreamshaper_8.safetensors"
+    },
+    "_meta": {
+      "title": "CheckpointLoaderSimple"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "animated scene, smooth motion, cinematic, high quality, vertical 9:16 video, viral content"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "static, blurry, low quality, distorted, watermark, text"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 512,
+      "height": 768,
+      "batch_size": 16
+    },
+    "_meta": {
+      "title": "EmptyLatentImage"
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "seed": 776655443,
+      "control_after_generate": "randomize",
+      "steps": 25,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1
+    },
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "_meta": {
+      "title": "VAEDecode"
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "6",
+        0
+      ],
+      "filename_prefix": "animatediff_frame"
+    },
+    "_meta": {
+      "title": "SaveImage"
+    }
+  },
+  "8": {
+    "class_type": "Note",
+    "inputs": {
+      "text": "WORKFLOW DE VIDEO ANIMADO (AnimateDiff)\n\nPara activar el motion module:\n1. Instala ComfyUI-AnimateDiff-Evolved (incluido en custom_nodes_list.json)\n2. Anade un nodo 'AnimateDiffLoader' antes del KSampler\n3. Selecciona mm_sd_v15_v2.ckpt\n4. El batch_size en EmptyLatentImage controla los frames (16 = ~2 seg a 8fps)\n5. El output sera un batch de imagenes que puedes guardar como GIF/MP4\n\nPara exportar a MP4:\n- Usa un nodo VHS_VideoCombine del paquete ComfyUI-VideoHelperSuite\n- O convierte los frames con ffmpeg fuera de ComfyUI"
+    },
+    "_meta": {
+      "title": "Note"
+    }
+  }
+}

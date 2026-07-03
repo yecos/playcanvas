@@ -111,6 +111,15 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
     echo -e "${YELLOW}ADVERTENCIA:${NC} Fallo CUDA, intentando version CPU..."
     pip install torch torchvision torchaudio
 }
+
+# Verificar CUDA
+echo "  Verificando CUDA..."
+python -c "import torch; assert torch.cuda.is_available(), 'CUDA NO disponible. Reinstala driver NVIDIA.'; print(f'CUDA OK: {torch.cuda.get_device_name(0)}')" || {
+    echo -e "${YELLOW}ADVERTENCIA:${NC} CUDA no disponible. ComfyUI funcionara en modo CPU (muy lento)."
+    echo "  Solucion: actualiza driver NVIDIA desde https://www.nvidia.com/Download/index.aspx"
+    read -p "  Continuar de todos modos? (s/N): " CONFIRM_CPU
+    if [[ ! "$CONFIRM_CPU" =~ ^[sS]$ ]]; then exit 1; fi
+}
 echo -e "  ${GREEN}OK:${NC} PyTorch instalado."
 
 # ---- ComfyUI requirements ----
@@ -153,9 +162,21 @@ echo "  Este paso es el mas largo. Se mostrara progreso."
 echo "  Si falla, puedes reanudar ejecutando:"
 echo "    python scripts/download_models.py --retry"
 echo ""
+echo "  IMPORTANTE: Juggernaut XL requiere token de CivitAI (gratis)."
+echo "  Registrate en https://civitai.com y crea API key en Account Settings."
+read -p "  Pega tu CivitAI API key (o Enter para saltar): " CIVITAI_KEY
+if [[ -n "$CIVITAI_KEY" ]]; then
+    export CIVITAI_TOKEN="$CIVITAI_KEY"
+fi
 read -p "  Descargar modelos ahora? (S/n): " DL
 if [[ ! "$DL" =~ ^[nN]$ ]]; then
     python scripts/download_models.py || echo -e "${YELLOW}Algunos modelos pudieron fallar. Reejecuta con --retry${NC}"
+fi
+
+# Copiar extra_model_paths.yaml a ComfyUI
+if [ -f "config/extra_model_paths.yaml" ] && [ ! -f "ComfyUI/extra_model_paths.yaml" ]; then
+    cp config/extra_model_paths.yaml ComfyUI/extra_model_paths.yaml
+    echo -e "  ${GREEN}OK:${NC} extra_model_paths.yaml copiado a ComfyUI"
 fi
 
 # ---- 8. Workflows ----
@@ -164,6 +185,17 @@ echo "  [8/8] Copiando workflows preconfigurados..."
 mkdir -p ComfyUI/user/default/workflows
 cp -f workflows/*.json ComfyUI/user/default/workflows/ 2>/dev/null || true
 echo -e "  ${GREEN}OK:${NC} Workflows copiados a ComfyUI/user/default/workflows/"
+
+# Convertir workflows a API Format (necesario para auto_publish)
+echo ""
+echo "  Convirtiendo workflows a API Format (necesario para auto_publish)..."
+python scripts/convert_workflow_format.py --all || echo -e "${YELLOW}Algunos workflows fallaron conversion${NC}"
+echo -e "  ${GREEN}OK:${NC} Workflows API Format generados."
+
+# Inicializar configuracion del usuario (.env, calendar.json)
+echo ""
+echo "  Inicializando configuracion (.env, calendar.json)..."
+python scripts/init_config.py
 
 # ---- Final ----
 echo ""

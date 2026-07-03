@@ -17,7 +17,7 @@ tweepy>=4.14.0
 facebook-sdk>=3.1.0
 
 # --- Pinterest ---
-py3-pin>=1.1.0
+py3-pinterest>=1.1.0
 
 # --- YouTube Data API ---
 google-api-python-client>=2.100.0

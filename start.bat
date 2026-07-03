@@ -42,8 +42,8 @@ echo.
 call venv\Scripts\activate.bat
 cd ComfyUI
 
-REM ---- Abrir navegador tras 5 segundos ----
-start "" /b cmd /c "timeout /t 5 /nobreak >nul && start http://127.0.0.1:8188"
+REM ---- Abrir navegador cuando ComfyUI responda (poll cada 2s, max 60s) ----
+start "" /b cmd /c "powershell -Command \"for ($i=0; $i -lt 30; $i++) { try { $r = Invoke-WebRequest -Uri 'http://127.0.0.1:8188/system_stats' -UseBasicParsing -TimeoutSec 2; if ($r.StatusCode -eq 200) { Start-Process 'http://127.0.0.1:8188'; break } } catch {}; Start-Sleep -Seconds 2 }\""
 
 python main.py !LAUNCH_ARGS!
 

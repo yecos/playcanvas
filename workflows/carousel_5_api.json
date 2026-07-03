@@ -1,0 +1,117 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v9.safetensors"
+    },
+    "_meta": {
+      "title": "CheckpointLoaderSimple"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "instagram carousel, 5 cohesive images, consistent style, professional photography, brand identity, instagram ready"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "blurry, low quality, distorted, ugly, watermark, jpeg artifacts"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "seed": 100,
+      "control_after_generate": "fixed",
+      "steps": 30,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1
+    },
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "9": {
+    "class_type": "Note",
+    "inputs": {
+      "text": "WORKFLOW CARRUSEL DE 5 IMAGENES\n\nPara usarlo correctamente:\n1. Cambia el seed del KSampler a 'fixed' para consistencia\n2. Duplica el bloque KSampler + VAEDecode + SaveImage 5 veces\n3. En cada duplicado, varía ligeramente el prompt (sujeto, angulo, etc.)\n4. Mantén el mismo seed base + variaciones (ej: 100, 101, 102, 103, 104)\n5. Mantén el mismo LoRA activo para coherencia de estilo\n\nAlternativa mas simple:\n- Genera 5 imagenes una a una con el mismo prompt y seeds consecutivas\n- Renombralas como carousel_01.jpg, carousel_02.jpg, etc.\n\nResolucion recomendada para carrusel de Instagram: 1080x1080"
+    },
+    "_meta": {
+      "title": "Note"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1080,
+      "height": 1080,
+      "batch_size": 1
+    },
+    "_meta": {
+      "title": "EmptyLatentImage"
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "_meta": {
+      "title": "VAEDecode"
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "6",
+        0
+      ],
+      "filename_prefix": "carousel_01"
+    },
+    "_meta": {
+      "title": "SaveImage"
+    }
+  }
+}

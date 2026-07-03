@@ -39,14 +39,19 @@ echo ""
 source venv/bin/activate
 cd ComfyUI
 
-# Abrir navegador tras 5 segundos
+# Abrir navegador cuando ComfyUI responda (poll cada 2s, max 60s)
 (
-    sleep 5
-    if command -v xdg-open &> /dev/null; then
-        xdg-open http://127.0.0.1:8188
-    elif command -v open &> /dev/null; then
-        open http://127.0.0.1:8188
-    fi
+    for i in $(seq 1 30); do
+        if curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8188/system_stats 2>/dev/null | grep -q "200"; then
+            if command -v xdg-open &> /dev/null; then
+                xdg-open http://127.0.0.1:8188
+            elif command -v open &> /dev/null; then
+                open http://127.0.0.1:8188
+            fi
+            break
+        fi
+        sleep 2
+    done
 ) &
 
 python main.py $LAUNCH_ARGS

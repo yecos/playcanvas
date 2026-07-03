@@ -135,28 +135,56 @@ def update_post_status(post_id: str, status: str,
 # ============================================================
 
 def prepare_workflow(post: Dict) -> Dict:
-    """Carga el workflow y sustituye variables dinamicas."""
+    """Carga el workflow (API Format) y sustituye variables dinamicas."""
+    # Buscar primero la version API Format (la que necesita el endpoint /prompt)
     workflow_path = ROOT_DIR / "workflows" / f"{post['workflow']}_api.json"
 
-    # Fallback: si no existe version API, usar version normal
     if not workflow_path.exists():
-        workflow_path = ROOT_DIR / "workflows" / f"{post['workflow']}.json"
-        if not workflow_path.exists():
+        # Fallback: si existe UI format, intentar convertirlo on-the-fly
+        ui_path = ROOT_DIR / "workflows" / f"{post['workflow']}.json"
+        if ui_path.exists():
+            log.info(f"Convirtiendo {ui_path.name} a API format on-the-fly...")
+            try:
+                from convert_workflow_format import convert_ui_to_api, is_api_format
+                with open(ui_path, "r", encoding="utf-8") as f:
+                    ui_data = json.load(f)
+                if is_api_format(ui_data):
+                    workflow = ui_data
+                else:
+                    workflow = convert_ui_to_api(ui_data)
+                # Guardar para futuras ejecuciones
+                with open(workflow_path, "w", encoding="utf-8") as f:
+                    json.dump(workflow, f, indent=2, ensure_ascii=False)
+                log.info(f"Workflow API guardado: {workflow_path.name}")
+            except Exception as e:
+                raise FileNotFoundError(
+                    f"No se pudo convertir workflow {post['workflow']}: {e}. "
+                    f"Ejecuta: python scripts/convert_workflow_format.py --all"
+                )
+        else:
             raise FileNotFoundError(
-                f"Workflow no encontrado: {post['workflow']}"
+                f"Workflow no encontrado: {post['workflow']} "
+                f"(buscado en {workflow_path} y {ui_path})"
             )
+    else:
+        workflow = load_workflow_api_json(str(workflow_path))
 
-    workflow = load_workflow_api_json(str(workflow_path))
+    # Validar que el workflow este en API format
+    if "class_type" not in next(iter(workflow.values()), {}):
+        raise ValueError(
+            f"Workflow {post['workflow']} no esta en API Format. "
+            f"Ejecuta: python scripts/convert_workflow_format.py --all"
+        )
 
-    # Sustituir prompt positivo (CLIPTextEncode positivo)
-    if "prompt" in post:
-        # Buscar nodos CLIPTextEncode y modificar el primero
-        clip_nodes = find_nodes_by_class(workflow, "CLIPTextEncode")
-        if clip_nodes:
-            set_workflow_input(workflow, clip_nodes[0], "text",
-                               post["prompt"])
+    # Buscar nodos CLIPTextEncode (siempre inicializar para evitar NameError)
+    clip_nodes = find_nodes_by_class(workflow, "CLIPTextEncode")
 
-    # Sustituir prompt negativo
+    # Sustituir prompt positivo (primer CLIPTextEncode)
+    if "prompt" in post and clip_nodes:
+        set_workflow_input(workflow, clip_nodes[0], "text",
+                           post["prompt"])
+
+    # Sustituir prompt negativo (segundo CLIPTextEncode)
     if "negative_prompt" in post and len(clip_nodes) > 1:
         set_workflow_input(workflow, clip_nodes[1], "text",
                            post["negative_prompt"])
@@ -211,7 +239,7 @@ def execute_workflow(client: ComfyUIClient, workflow: Dict,
 
     images = client.get_output_images(history)
     if not images:
-        raise RuntimeError(f"No se generaron imagenes para post {post_id}")
+        raise RuntimeError(f"No se generaron outputs para post {post_id}")
 
     saved_paths = []
     for fname, data in images:
@@ -219,7 +247,7 @@ def execute_workflow(client: ComfyUIClient, workflow: Dict,
         with open(out_path, "wb") as f:
             f.write(data)
         saved_paths.append(out_path)
-        log.info(f"Imagen guardada: {out_path}")
+        log.info(f"Output guardado: {out_path}")
 
     return saved_paths
 
@@ -229,26 +257,38 @@ def execute_workflow(client: ComfyUIClient, workflow: Dict,
 # ============================================================
 
 def publish_instagram(image_path: Path, caption: str) -> Dict:
-    """Publica en Instagram usando instagrapi."""
+    """Publica en Instagram usando instagrapi con session caching."""
     try:
         from instagrapi import Client
     except ImportError:
         log.error("instagrapi no instalado. Ejecuta: pip install instagrapi")
         return {"success": False, "error": "instagrapi not installed"}
 
+    session_file = ROOT_DIR / "ig_session.json"
     cl = Client()
+
+    # Reusar sesion si existe para evitar multiples logins (ban risk)
+    if session_file.exists():
+        try:
+            cl.load_settings(str(session_file))
+            cl.get_timeline_feed()  # valida sesion
+            log.info("  Sesion IG reusada.")
+        except Exception:
+            cl = Client()  # sesion invalida, recrear
+
     try:
-        cl.login(os.environ["IG_USERNAME"], os.environ["IG_PASSWORD"])
+        if not cl.user_id:
+            cl.login(os.environ["IG_USERNAME"], os.environ["IG_PASSWORD"])
+            cl.dump_settings(str(session_file))
+            log.info("  Login IG OK, sesion guardada.")
         media = cl.photo_upload(str(image_path), caption=caption)
         return {"success": True, "media_id": media.id,
                 "url": f"https://instagram.com/p/{media.code}/"}
     except Exception as e:
         return {"success": False, "error": str(e)}
     finally:
-        try:
-            cl.logout()
-        except Exception:
-            pass
+        # NO cerrar sesion para poder reusarla
+        pass
 
 
 # ============================================================
@@ -330,7 +370,7 @@ def publish_pinterest(image_path: Path, caption: str,
             email=os.environ["PINTEREST_EMAIL"],
             password=os.environ["PINTEREST_PASSWORD"],
             username=os.environ["PINTEREST_USERNAME"],
-            cred_root="pinterest_creds"
+            cred_root=str(ROOT_DIR / "pinterest_creds")
         )
         p.login()
         response = p.upload_pin(
@@ -345,6 +385,114 @@ def publish_pinterest(image_path: Path, caption: str,
 
 
 # ============================================================
+# Publishing - YouTube (Shorts)
+# ============================================================
+
+def publish_youtube(video_path: Path, title: str = "",
+                    description: str = "", tags: list = None) -> Dict:
+    """Sube un video a YouTube usando la Data API v3 (OAuth flow)."""
+    try:
+        from google.oauth2.credentials import Credentials
+        from google_auth_oauthlib.flow import InstalledAppFlow
+        from google.auth.transport.requests import Request
+        from googleapiclient.discovery import build
+        from googleapiclient.http import MediaFileUpload
+    except ImportError:
+        log.error("google-api-python-client no instalado. pip install google-api-python-client google-auth-oauthlib")
+        return {"success": False, "error": "google-api deps not installed"}
+
+    tags = tags or []
+    client_secrets = os.environ.get("YOUTUBE_CLIENT_SECRETS_FILE", "client_secret.json")
+    token_file = ROOT_DIR / "youtube_token.json"
+    scopes = ["https://www.googleapis.com/auth/youtube.upload"]
+
+    creds = None
+    if token_file.exists():
+        try:
+            creds = Credentials.from_authorized_user_file(str(token_file), scopes)
+        except Exception:
+            creds = None
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            if not Path(client_secrets).exists():
+                return {"success": False,
+                        "error": f"Falta {client_secrets}. Descarga OAuth credentials desde https://console.cloud.google.com/"}
+            flow = InstalledAppFlow.from_client_secrets_file(client_secrets, scopes)
+            creds = flow.run_local_server(port=0)
+        with open(token_file, "w") as f:
+            f.write(creds.to_json())
+
+    try:
+        yt = build("youtube", "v3", credentials=creds)
+        body = {
+            "snippet": {
+                "title": title[:100],
+                "description": description,
+                "tags": tags,
+                "categoryId": "24",  # Entertainment
+            },
+            "status": {
+                "privacyStatus": "public",
+                "selfDeclaredMadeForKids": False,
+            }
+        }
+        media = MediaFileUpload(str(video_path), chunksize=-1,
+                                resumable=True, mimetype="video/*")
+        request = yt.videos().insert(part="snippet,status",
+                                     body=body, media_body=media)
+        response = None
+        while response is None:
+            status, response = request.next_chunk()
+        video_id = response["id"]
+        return {"success": True, "video_id": video_id,
+                "url": f"https://youtube.com/watch?v={video_id}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+# ============================================================
+# Publishing - TikTok
+# ============================================================
+
+def publish_tiktok(video_path: Path, caption: str = "",
+                   hashtags: list = None) -> Dict:
+    """Sube un video a TikTok usando tiktok-uploader (no oficial)."""
+    try:
+        from tiktok_uploader.upload import upload_video
+    except ImportError:
+        log.error("tiktok-uploader no instalado. pip install tiktok-uploader")
+        return {"success": False, "error": "tiktok-uploader not installed"}
+
+    hashtags = hashtags or []
+    # Anadir hashtags al caption si no estan
+    caption_with_tags = caption
+    for tag in hashtags:
+        if f"#{tag}" not in caption:
+            caption_with_tags += f" #{tag}"
+
+    username = os.environ.get("TIKTOK_USERNAME")
+    password = os.environ.get("TIKTOK_PASSWORD")
+    if not username or not password:
+        return {"success": False,
+                "error": "TIKTOK_USERNAME y TIKTOK_PASSWORD requeridos en .env"}
+
+    try:
+        # tiktok-uploader requiere cookies selenium en algunos casos
+        # Forma simple: usar credenciales
+        result = upload_video(
+            str(video_path),
+            description=caption_with_tags,
+            credentials={"username": username, "password": password},
+        )
+        return {"success": True, "response": str(result)}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+# ============================================================
 # Orquestador principal
 # ============================================================
 
@@ -353,6 +501,8 @@ PUBLISHERS = {
     "twitter": publish_twitter,
     "facebook": publish_facebook,
     "pinterest": publish_pinterest,
+    "youtube": publish_youtube,
+    "tiktok": publish_tiktok,
 }
 
 
@@ -397,10 +547,22 @@ def process_post(post: Dict, client: ComfyUIClient,
             continue
         log.info(f"  Publicando en {platform}...")
         try:
-            result = PUBLISHERS[platform](
-                image_paths[0], caption,
-                title=post.get("title", "") if platform == "pinterest" else ""
-            )
+            # Cada publicador tiene su propia firma (algunos requieren title)
+            if platform == "pinterest":
+                result = PUBLISHERS[platform](
+                    image_paths[0], caption,
+                    title=post.get("title", "")
+                )
+            elif platform == "youtube":
+                result = PUBLISHERS[platform](
+                    image_paths[0],
+                    title=post.get("title", caption[:100]),
+                    description=caption,
+                    tags=post.get("tags", [])
+                )
+            else:
+                # instagram, twitter, facebook, tiktok - solo image + caption
+                result = PUBLISHERS[platform](image_paths[0], caption)
             results[platform] = result
             if result.get("success"):
                 log.info(f"    OK: {result.get('url', '')}")

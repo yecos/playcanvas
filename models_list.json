@@ -13,10 +13,10 @@
     },
     {
       "name": "juggernautXL_v9.safetensors",
-      "url": "https://civitai.com/api/download/models/45618?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+      "url": "https://civitai.com/api/download/models/324919?type=Model&format=SafeTensor&size=pruned&fp=fp16",
       "size_gb": 6.5,
       "required": true,
-      "description": "Juggernaut XL v9 - Excelente para fotografias realistas y retratos",
+      "description": "Juggernaut XL v9 - Excelente para fotografias realistas y retratos (REQUIERE token CivitAI: CIVITAI_TOKEN env var)",
       "headers": {
         "Authorization": "Bearer"
       }

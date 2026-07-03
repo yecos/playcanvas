@@ -29,3 +29,6 @@ websocket-client>=1.7.0
 # --- Utilidades ---
 pyyaml>=6.0
 rich>=13.7.0
+colorama>=0.4.6
+psutil>=5.9.0
+filelock>=3.13.0

@@ -30,6 +30,20 @@ class Color:
     BOLD = '\033[1m'
     END = '\033[0m'
 
+# En Windows, activar soporte ANSI via colorama si esta disponible
+if sys.platform.startswith('win'):
+    try:
+        import colorama
+        colorama.init()
+    except ImportError:
+        # Si colorama no esta instalado, intentar activar VT processing nativo
+        try:
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+        except Exception:
+            pass
+
 
 def cprint(msg, color=None):
     """Imprime con color."""
@@ -123,7 +137,7 @@ def save_json(path, data):
 
 def download_file(url, dest, headers=None, retries=3):
     """
-    Descarga un archivo con barra de progreso.
+    Descarga un archivo con barra de progreso y soporte REAL de resume.
     Devuelve True si tuvo exito.
     """
     from tqdm import tqdm
@@ -131,23 +145,41 @@ def download_file(url, dest, headers=None, retries=3):
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
 
+    # Tamano ya descargado (para resume)
+    existing_size = dest.stat().st_size if dest.exists() else 0
+
     for attempt in range(1, retries + 1):
         try:
             req = Request(url)
             if headers:
                 for k, v in headers.items():
                     req.add_header(k, v)
-            with urlopen(req, timeout=60) as response:
-                total = int(response.headers.get('Content-Length', 0))
-                chunk_size = 1024 * 1024  # 1MB
 
-                with open(dest, 'wb') as f, tqdm(
+            # Si tenemos un archivo parcial, anadir Range header para resumir
+            if existing_size > 0:
+                req.add_header("Range", f"bytes={existing_size}-")
+
+            with urlopen(req, timeout=60) as response:
+                # Verificar si el servidor soporta resume (206 Partial Content)
+                supports_resume = response.status == 206
+                total_header = response.headers.get('Content-Length', 0)
+                if supports_resume:
+                    total = int(total_header) + existing_size
+                else:
+                    # El servidor no soporta resume, empezar desde 0
+                    total = int(total_header)
+                    existing_size = 0
+
+                chunk_size = 1024 * 1024  # 1MB
+                mode = 'ab' if (supports_resume and existing_size > 0) else 'wb'
+
+                with open(dest, mode) as f, tqdm(
                     total=total,
                     unit='B',
                     unit_scale=True,
                     unit_divisor=1024,
                     desc=dest.name,
-                    initial=dest.stat().st_size if dest.exists() else 0,
+                    initial=existing_size,
                 ) as pbar:
                     while True:
                         chunk = response.read(chunk_size)
@@ -160,6 +192,8 @@ def download_file(url, dest, headers=None, retries=3):
             warn(f"Intento {attempt}/{retries} fallo para {dest.name}: {e}")
             if attempt == retries:
                 return False
+            # Actualizar existing_size por si acaso se descargo algo
+            existing_size = dest.stat().st_size if dest.exists() else 0
     return False
 
 

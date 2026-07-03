@@ -2,6 +2,25 @@
 # ComfyUI Social Media Suite - .gitignore
 # ============================================
 
+# --- Env files (NEVER commit credentials) ---
+.env
+.env.*
+!config/.env.example
+
+# --- Sessions / tokens / credentials cache ---
+ig_session.json
+youtube_token.json
+pinterest_creds/
+pinterest_creds/**
+*.session
+client_secret.json
+
+# --- Temp ---
+*.tmp
+*.bak
+*.cache
+.cache/
+
 # --- ComfyUI core (cloned by installer) ---
 ComfyUI/
 comfyui/

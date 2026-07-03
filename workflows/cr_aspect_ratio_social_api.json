@@ -1,0 +1,181 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v9.safetensors"
+    },
+    "_meta": {
+      "title": "CheckpointLoaderSimple"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "professional photography, sharp focus, 8k uhd, high quality, detailed, studio lighting, vibrant colors, instagram ready, professional photo, perfect composition"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "blurry, low quality, distorted, ugly, watermark, text, signature, jpeg artifacts, deformed, disfigured, bad anatomy, bad proportions"
+    },
+    "_meta": {
+      "title": "CLIPTextEncode"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1280,
+      "height": 1280,
+      "batch_size": 1
+    },
+    "_meta": {
+      "title": "EmptyLatentImage"
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "seed": 123456789,
+      "control_after_generate": "randomize",
+      "steps": 30,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1
+    },
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "_meta": {
+      "title": "VAEDecode"
+    }
+  },
+  "7": {
+    "class_type": "CR Aspect Ratio Social Media",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "width_height": "1080 x 1080",
+      "swap_axis": "center",
+      "batch_size": 0
+    },
+    "_meta": {
+      "title": "CR Aspect Ratio Social Media"
+    }
+  },
+  "8": {
+    "class_type": "CR Aspect Ratio Social Media",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "width_height": "1080 x 1350",
+      "swap_axis": "center",
+      "batch_size": 0
+    },
+    "_meta": {
+      "title": "CR Aspect Ratio Social Media"
+    }
+  },
+  "9": {
+    "class_type": "CR Aspect Ratio Social Media",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "width_height": "1080 x 1920",
+      "swap_axis": "center",
+      "batch_size": 0
+    },
+    "_meta": {
+      "title": "CR Aspect Ratio Social Media"
+    }
+  },
+  "10": {
+    "class_type": "CR Aspect Ratio Social Media",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "width_height": "1200 x 675",
+      "swap_axis": "center",
+      "batch_size": 0
+    },
+    "_meta": {
+      "title": "CR Aspect Ratio Social Media"
+    }
+  },
+  "11": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "7",
+        0
+      ],
+      "filename_prefix": "social_ig_square"
+    },
+    "_meta": {
+      "title": "SaveImage"
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "social_ig_portrait"
+    },
+    "_meta": {
+      "title": "SaveImage"
+    }
+  }
+}
