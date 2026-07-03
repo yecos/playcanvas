@@ -129,7 +129,8 @@ if not errorlevel 1 (
 if "!VC_REDIST_OK!"=="0" (
     echo  VC++ Redistributable no detectado. Instalando...
     call :install_vc_redist
-    REM No es critico si falla
+    REM No es critico si falla, continuamos de todos modos
+    echo  Continuando con el resto de la instalacion...
 ) else (
     echo  OK: VC++ Redistributable x64 instalado.
 )
@@ -140,30 +141,43 @@ REM ============================================================
 echo.
 echo  [4/5] Verificando GPU NVIDIA...
 nvidia-smi >nul 2>&1
-if errorlevel 1 (
-    echo  ADVERTENCIA: nvidia-smi no responde.
-    echo  Posibles causas:
-    echo    - No tienes GPU NVIDIA (ComfyUI funcionara en modo CPU, muy lento)
-    echo    - Driver NVIDIA no instalado o muy antiguo
-    echo.
-    echo  Descarga el driver mas reciente desde:
-    echo    https://www.nvidia.com/Download/index.aspx
-    echo.
-    echo  Continuando de todos modos...
-) else (
-    for /f "tokens=1,2 delims=," %%a in ('nvidia-smi --query-gpu^=name,memory.total --format^=csv^,noheader 2^>^&1') do (
-        echo  OK: GPU: %%a, VRAM: %%b
-    )
-    REM Verificar driver version
-    for /f "tokens=*" %%a in ('nvidia-smi --query-gpu^=driver_version --format^=csv^,noheader 2^>^&1') do set DRVVER=%%a
-    if defined DRVVER (
-        for /f "tokens=1 delims=." %%a in ("!DRVVER!") do set DRVMAJOR=%%a
-        if !DRVMAJOR! LSS 525 (
-            echo  ADVERTENCIA: Driver !DRVVER! puede ser antiguo (recomendado ^>= 525).
-            echo  Actualiza desde: https://www.nvidia.com/Download/index.aspx
-        )
+if errorlevel 1 goto nvidia_missing
+
+REM NVIDIA presente - extraer info
+for /f "tokens=1,2 delims=," %%a in ('nvidia-smi --query-gpu^=name,memory.total --format^=csv^,noheader 2^>^&1') do (
+    echo  OK: GPU: %%a, VRAM: %%b
+    goto nvidia_check_driver
+)
+
+:nvidia_check_driver
+for /f "tokens=*" %%a in ('nvidia-smi --query-gpu^=driver_version --format^=csv^,noheader 2^>^&1') do set "DRVVER=%%a"
+if defined DRVVER (
+    for /f "tokens=1 delims=." %%a in ("!DRVVER!") do set "DRVMAJOR=%%a"
+    if !DRVMAJOR! LSS 525 (
+        echo  ADVERTENCIA: Driver !DRVVER! puede ser antiguo ^(recomendado ^>= 525^).
+        echo  Actualiza desde: https://www.nvidia.com/Download/index.aspx
+    ) else (
+        echo  OK: Driver NVIDIA !DRVVER!
     )
 )
+goto nvidia_done
+
+:nvidia_missing
+echo  ADVERTENCIA: nvidia-smi no responde.
+echo  Posibles causas:
+echo    - No tienes GPU NVIDIA instalada
+echo    - Driver NVIDIA no instalado o muy antiguo
+echo    - GPU integrada Intel/AMD activa en lugar de la NVIDIA
+echo.
+echo  ComfyUI funcionara en modo CPU ^(MUY lento, 10-50x mas lento^).
+echo.
+echo  Si tienes GPU NVIDIA, descarga el driver mas reciente desde:
+echo    https://www.nvidia.com/Download/index.aspx
+echo  Selecciona: GeForce -^> GeForce RTX 30 Series -^> RTX 3060 -^> Windows 11
+echo.
+echo  Continuando de todos modos en modo CPU...
+
+:nvidia_done
 
 REM ============================================================
 REM 5. Verificar permisos de ejecucion de scripts PowerShell
@@ -275,23 +289,34 @@ REM ============================================================
     exit /b 0
 
 :install_vc_redist
+    echo  Descargando VC++ Redistributable desde Microsoft...
     set "VC_URL=https://aka.ms/vs/17/release/vc_redist.x64.exe"
     set "VC_INSTALLER=%TEMP%\vc_redist.x64.exe"
 
-    powershell -Command "Invoke-WebRequest -Uri '!VC_URL!' -OutFile '!VC_INSTALLER!' -UseBasicParsing" 2>nul
-    if errorlevel 1 (
-        curl -L -o "!VC_INSTALLER!" "!VC_URL!" 2>nul
-    )
+    REM Metodo 1: PowerShell
+    echo  Intentando con PowerShell...
+    powershell -Command "try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%VC_URL%' -OutFile '%VC_INSTALLER%' -UseBasicParsing -TimeoutSec 60 } catch { exit 1 }" 2>nul
+    if exist "!VC_INSTALLER!" goto vc_install
 
-    if exist "!VC_INSTALLER!" (
-        echo  Instalando VC++ Redistributable...
-        "!VC_INSTALLER!" /install /quiet /norestart
-        del "!VC_INSTALLER!" >nul 2>&1
-        echo  OK: VC++ Redistributable instalado.
-    ) else (
-        echo  No se pudo descargar. Descarga manual desde:
-        echo    https://aka.ms/vs/17/release/vc_redist.x64.exe
+    REM Metodo 2: curl
+    echo  Reintentando con curl...
+    curl -L --connect-timeout 30 -o "!VC_INSTALLER!" "!VC_URL!" 2>nul
+    if exist "!VC_INSTALLER!" goto vc_install
+
+    echo  No se pudo descargar automaticamente ^(posible firewall/antivirus^).
+    echo  Descarga manual desde: https://aka.ms/vs/17/release/vc_redist.x64.exe
+    echo  Ejecuta el .exe descargado y vuelve a correr bootstrap.bat
+    exit /b 1
+
+:vc_install
+    echo  Instalando VC++ Redistributable...
+    "!VC_INSTALLER!" /install /quiet /norestart
+    if errorlevel 1 (
+        echo  Instalacion silenciosa fallo, intentando con UI...
+        "!VC_INSTALLER!" /install /passive /norestart
     )
+    del "!VC_INSTALLER!" >nul 2>&1
+    echo  OK: VC++ Redistributable instalado.
     exit /b 0
 
 :refresh_path
