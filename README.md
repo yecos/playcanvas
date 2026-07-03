@@ -372,11 +372,26 @@ Más detalles en **docs/ARCHITECTURE.md**.
 El sistema está preparado para integrarse con agentes AI autónomos:
 
 ### Vía MCP Server (recomendado)
-El custom node `comfyui-mcp-server` expone ComfyUI como servidor MCP. Agentes como **Hermes Agent** pueden:
+El script `scripts/mcp_agent_tools.py` expone el suite como servidor MCP (Model Context Protocol). Cualquier agente compatible con MCP (Hermes Agent, Claude Desktop, Cursor, Continue.dev) puede:
+
 - Listar workflows disponibles
-- Ejecutar workflows con parámetros
-- Instalar modelos y custom nodes
-- Self-improvement sobre resultados
+- Encolar jobs con parámetros arbitrarios
+- Consultar estado de jobs
+- Pausar/reanudar cola
+- Generar captions con LLM
+- Obtener analytics
+
+**Configurar en Claude Desktop** (ejemplo `claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "comfyui-social": {
+      "command": "python",
+      "args": ["/ruta/al/scripts/mcp_agent_tools.py"]
+    }
+  }
+}
+```
 
 🔗 Doc oficial Hermes + ComfyUI: https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-comfyui
 
@@ -387,6 +402,70 @@ El wrapper `scripts/comfyui_api_client.py` puede ser usado como tool por cualqui
 Para integración visual sin código, usar n8n con el nodo `n8n-nodes-comfyui`.
 
 Más detalles en **docs/ARCHITECTURE.md**.
+
+---
+
+## 🛡️ Seguridad y Moderación Anti-Ban
+
+El sistema incluye `scripts/content_moderator.py` que se ejecuta automáticamente antes de publicar:
+
+- **Detección NSFW en imagen** (vía transformers / CLIP-based classifier)
+- **Filtro de profanidad** en captions (palabras banneas por plataforma)
+- **Validación de policies** (TikTok/Meta exigen etiquetar contenido AI)
+- **Bloqueo automático** si el contenido no pasa los checks
+
+Personaliza palabras prohibidas en `scripts/content_moderator.py` (`BANNED_WORDS` y `PLATFORM_BANNED`).
+
+---
+
+## 🎨 Branding Automático
+
+El script `scripts/brand_overlay.py` aplica tu branding consistente a todas las imágenes generadas:
+
+1. Crea tu brand kit:
+   ```bash
+   python scripts/brand_overlay.py --init
+   ```
+2. Edita `config/brand_kit.yaml` con:
+   - Logo PNG con transparencia
+   - Handle de redes sociales (@tumarca)
+   - Colores de marca
+   - Fuente tipográfica
+3. Cada post publicado llevará automáticamente tu logo + handle
+
+---
+
+## 🤖 Control Remoto vía Telegram
+
+El script `scripts/bot_telegram.py` te permite controlar el sistema desde tu móvil:
+
+```bash
+python scripts/bot_telegram.py
+```
+
+**Comandos disponibles:**
+- `/status` - Estado del sistema
+- `/pending` - Posts pendientes
+- `/gen <workflow> <prompt>` - Encolar generación
+- `/publish <post_id>` - Publicar post
+- `/pause` / `/resume` - Controlar cola
+- `/retry` - Reintentar fallidos
+
+Configura con `TELEGRAM_BOT_TOKEN` (vía @BotFather) y `TELEGRAM_ALLOWED_USER_IDS` en `.env`.
+
+---
+
+## 📊 Analytics de Engagement
+
+El script `scripts/analytics_collector.py` recolecta métricas de cada post publicado:
+
+```bash
+python analytics_collector.py collect    # recolectar
+python analytics_collector.py summary    # resumen por plataforma
+python analytics_collector.py top        # top 10 por engagement
+```
+
+Métricas soportadas: likes, comments, shares, saves, impressions, reach, views, engagement_rate. Se guardan en `analytics.db` (SQLite).
 
 ---
 

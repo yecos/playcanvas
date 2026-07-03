@@ -49,3 +49,22 @@ cloudinary>=1.38.0
 
 # --- Logging / utils ---
 rich>=13.7.0
+
+# --- Moderation (NSFW detection) ---
+transformers>=4.40.0
+torch>=2.2.0  # ya instalado por ComfyUI, pero repetido por claridad
+
+# --- Webhook server ---
+flask>=3.0.0
+
+# --- Telegram bot ---
+python-telegram-bot>=21.0
+
+# --- MCP server (para integracion con agentes AI) ---
+mcp>=1.0.0
+
+# --- Calendar generator ---
+pyyaml>=6.0
+
+# --- Analytics (google-api ya incluido arriba) ---
+# No requiere extras adicionales

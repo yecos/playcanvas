@@ -1,0 +1,99 @@
+{
+  "1": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "umt5_xxl.safetensors",
+      "type": "wan"
+    },
+    "_meta": {"title": "Load CLIP (UMT5-XXL)"}
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 0],
+      "text": "a beautiful cinematic video, smooth camera motion, dynamic scene, professional quality, 4k"
+    },
+    "_meta": {"title": "Positive Prompt"}
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 0],
+      "text": "static, blurry, low quality, distorted, watermark, jpeg artifacts, choppy motion"
+    },
+    "_meta": {"title": "Negative Prompt"}
+  },
+  "4": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "wan2.1-t2v-1.3B.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "_meta": {"title": "Load Wan 2.1 UNET"}
+  },
+  "5": {
+    "class_type": "VAELoader",
+    "inputs": {"vae_name": "wan_2.1_vae.safetensors"},
+    "_meta": {"title": "Load VAE (Wan 2.1)"}
+  },
+  "6": {
+    "class_type": "EmptyHunyuanLatentVideo",
+    "inputs": {
+      "width": 832,
+      "height": 480,
+      "length": 41,
+      "batch_size": 1
+    },
+    "_meta": {"title": "Empty Latent Video (41 frames, 832x480)"}
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["4", 0],
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["6", 0],
+      "seed": 123456789,
+      "control_after_generate": "randomize",
+      "steps": 20,
+      "cfg": 5.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    },
+    "_meta": {"title": "KSampler (Wan 2.1)"}
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["7", 0], "vae": ["5", 0]},
+    "_meta": {"title": "VAE Decode Video"}
+  },
+  "9": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["8", 0],
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "wan21_video",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "save_metadata": true,
+      "pingpong": false,
+      "save_output": true
+    },
+    "_meta": {"title": "Save MP4 (16fps, ~2.5s)"}
+  },
+  "_meta": {
+    "title": "Wan 2.1 Text-to-Video (832x480, 41 frames)",
+    "description": "Workflow REAL de Wan 2.1 T2V 1.3B. Genera 41 frames a 832x480 (16:9) y los combina en MP4 a 16fps (~2.5 segundos). Optimizado para 12GB VRAM. Requiere modelos wan2.1-t2v-1.3B + umt5_xxl + wan_2.1_vae.",
+    "platform": "youtube",
+    "format": "832x480 x 41f -> MP4 ~2.5s @ 16fps",
+    "required_nodes": ["ComfyUI-VideoHelperSuite"],
+    "required_models": [
+      "wan2.1-t2v-1.3B.safetensors",
+      "umt5_xxl.safetensors",
+      "wan_2.1_vae.safetensors"
+    ],
+    "notes": "Tiempo estimado en RTX 3060 12GB: 8-15 minutos por video"
+  }
+}

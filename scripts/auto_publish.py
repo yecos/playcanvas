@@ -539,6 +539,49 @@ def process_post(post: Dict, client: ComfyUIClient,
     platforms = platforms_filter or post.get("platforms",
                                              ["instagram", "twitter"])
     caption = post.get("caption", post.get("prompt", "")[:2200])
+
+    # 3a. Aplicar branding (si brand_kit.yaml existe)
+    try:
+        from brand_overlay import apply_branding
+        from utils import ROOT_DIR as _RD
+        brand_kit_path = _RD / "config" / "brand_kit.yaml"
+        if brand_kit_path.exists():
+            log.info("  Aplicando branding...")
+            branded_path = str(image_paths[0]).replace(".", "_branded.", 1)
+            # Cambiar extension a .jpg
+            branded_path = Path(branded_path).with_suffix(".jpg")
+            apply_branding(str(image_paths[0]), str(branded_path))
+            image_paths[0] = Path(branded_path)
+            log.info(f"    Branding aplicado: {branded_path}")
+    except ImportError:
+        pass  # brand_overlay no disponible
+    except Exception as e:
+        log.warning(f"    Branding fallo: {e}")
+
+    # 3b. Moderacion anti-ban (si content_moderator disponible)
+    try:
+        from content_moderator import moderate
+        first_platform = platforms[0] if platforms else "instagram"
+        log.info(f"  Moderando contenido (plataforma: {first_platform})...")
+        moderation = moderate(
+            image_path=str(image_paths[0]),
+            caption=caption,
+            platform=first_platform
+        )
+        if not moderation["allowed"]:
+            log.error(f"  CONTENIDO BLOQUEADO: {moderation['reasons']}")
+            update_post_status(post_id, "blocked",
+                               {"moderation": moderation})
+            return {"success": False, "blocked": True,
+                    "reasons": moderation["reasons"]}
+        if moderation.get("warnings"):
+            for w in moderation["warnings"]:
+                log.warning(f"    {w}")
+    except ImportError:
+        pass  # content_moderator no disponible
+    except Exception as e:
+        log.warning(f"    Moderacion fallo: {e}")
+
     results = {}
 
     for platform in platforms:

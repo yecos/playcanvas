@@ -1,0 +1,90 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "dreamshaper_8.safetensors"},
+    "_meta": {"title": "Checkpoint (SD 1.5)"}
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "cinematic animation, smooth motion, dynamic scene, vibrant colors, professional, high quality, 8k"
+    },
+    "_meta": {"title": "Positive Prompt"}
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "static, blurry, low quality, distorted, watermark, jpeg artifacts, bad animation, flickering"
+    },
+    "_meta": {"title": "Negative Prompt"}
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {"width": 512, "height": 768, "batch_size": 16},
+    "_meta": {"title": "Empty Latent (16 frames)"}
+  },
+  "5": {
+    "class_type": "ADE_AnimateDiffLoaderWithContext",
+    "inputs": {
+      "model": ["1", 0],
+      "model_name": "mm_sd_v15_v2.ckpt",
+      "beta_schedule": "sqrt_linear",
+      "context_options": "On",
+      "context_length": 16,
+      "context_stride": 1,
+      "context_overlap": 4,
+      "closed_loop": "Off",
+      "sync_context_pe": "Off",
+      "context_pe_type": "ad",
+      "pe_shift": 1.0
+    },
+    "_meta": {"title": "AnimateDiff Loader"}
+  },
+  "6": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["5", 0],
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["4", 0],
+      "seed": 123456789,
+      "control_after_generate": "randomize",
+      "steps": 25,
+      "cfg": 7.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0
+    },
+    "_meta": {"title": "KSampler (con AnimateDiff)"}
+  },
+  "7": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["6", 0], "vae": ["1", 2]},
+    "_meta": {"title": "VAE Decode"}
+  },
+  "8": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": ["7", 0],
+      "frame_rate": 8,
+      "loop_count": 0,
+      "filename_prefix": "animatediff_video",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "save_metadata": true,
+      "pingpong": false,
+      "save_output": true
+    },
+    "_meta": {"title": "Save Video MP4 (VHS)"}
+  },
+  "_meta": {
+    "title": "AnimateDiff Video REAL (512x768, 16 frames, MP4)",
+    "description": "Workflow funcional de video con AnimateDiff + VHS_VideoCombine. Genera 16 frames a 512x768 y los combina en MP4 a 8fps (~2 segundos). Requiere ComfyUI-AnimateDiff-Evolved + ComfyUI-VideoHelperSuite instalados.",
+    "platform": "tiktok",
+    "format": "512x768 x 16f -> MP4 ~2s @ 8fps",
+    "required_nodes": ["ComfyUI-AnimateDiff-Evolved", "ComfyUI-VideoHelperSuite"],
+    "required_models": ["dreamshaper_8.safetensors", "mm_sd_v15_v2.ckpt"]
+  }
+}
