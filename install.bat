@@ -46,8 +46,20 @@ echo  [0/8] Verificando Python...
 python --version >nul 2>&1
 if errorlevel 1 (
     echo  ERROR: Python no esta instalado o no esta en el PATH.
-    echo  Descargalo desde: https://www.python.org/downloads/
-    echo  Asegurate de marcar "Add Python to PATH" al instalar.
+    echo  Ejecuta bootstrap.bat primero para instalar todos los prerrequisitos.
+    echo  Descargalo y ejecuta:
+    echo    bootstrap.bat
+    pause
+    exit /b 1
+)
+
+REM ---- Ejecutar check_prerequisites.py ----
+echo  Verificando prerrequisitos del sistema...
+python scripts\check_prerequisites.py
+if errorlevel 1 (
+    echo.
+    echo  ERROR: Prerrequisitos no cumplidos.
+    echo  Ejecuta bootstrap.bat para instalarlos automaticamente.
     pause
     exit /b 1
 )

@@ -50,12 +50,18 @@ echo ""
 echo "  [0/8] Verificando Python..."
 if ! command -v python3 &> /dev/null; then
     echo -e "${RED}ERROR: Python 3 no esta instalado.${NC}"
-    echo "  Instalalo con:"
-    echo "    Ubuntu/Debian: sudo apt install python3 python3-venv python3-pip"
-    echo "    Fedora:        sudo dnf install python3 python3-pip"
-    echo "    macOS:         brew install python@3.11"
+    echo "  Ejecuta ./bootstrap.sh primero para instalar todos los prerrequisitos."
     exit 1
 fi
+
+# Ejecutar check_prerequisites.py
+echo "  Verificando prerrequisitos del sistema..."
+python3 scripts/check_prerequisites.py || {
+    echo ""
+    echo -e "${RED}ERROR:${NC} Prerrequisitos no cumplidos."
+    echo "  Ejecuta ./bootstrap.sh para instalarlos automaticamente."
+    exit 1
+}
 PYVER=$(python3 --version 2>&1)
 echo -e "  ${GREEN}OK:${NC} $PYVER detectado."
 
