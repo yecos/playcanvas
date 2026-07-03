@@ -172,14 +172,23 @@ if errorlevel 1 (
 
 REM Verificar que CUDA realmente funciona
 echo  Verificando CUDA...
-python -c "import torch; assert torch.cuda.is_available(), 'CUDA NO disponible. Reinstala driver NVIDIA.'; print(f'CUDA OK: {torch.cuda.get_device_name(0)}')"
-if errorlevel 1 (
-    echo  ADVERTENCIA: CUDA no disponible. ComfyUI funcionara en modo CPU (muy lento).
-    echo  Solucion: actualiza driver NVIDIA desde https://www.nvidia.com/Download/index.aspx
-    echo  Continuando de todos modos en modo CPU...
-) else (
-    echo  OK: CUDA verificado.
-)
+python -c "import torch; print('CUDA_OK:' + str(torch.cuda.is_available()) + ':' + (torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'NO_CUDA'))" > "%TEMP%\cuda_check.txt" 2>&1
+type "%TEMP%\cuda_check.txt" | findstr /C:"CUDA_OK:True" >nul
+if errorlevel 1 goto cuda_failed
+
+REM CUDA OK - extraer nombre GPU
+for /f "tokens=3 delims=:" %%a in ('type "%TEMP%\cuda_check.txt" ^| findstr /C:"CUDA_OK:True"') do set "GPU_NAME=%%a"
+echo  OK: CUDA verificado - !GPU_NAME!
+del "%TEMP%\cuda_check.txt" >nul 2>&1
+goto cuda_done
+
+:cuda_failed
+echo  ADVERTENCIA: CUDA no disponible. ComfyUI funcionara en modo CPU ^(MUY lento^).
+echo  Solucion: actualiza driver NVIDIA desde https://www.nvidia.com/Download/index.aspx
+echo  Continuando de todos modos en modo CPU...
+del "%TEMP%\cuda_check.txt" >nul 2>&1
+
+:cuda_done
 echo  OK: PyTorch instalado.
 
 REM ---- ComfyUI requirements ----
