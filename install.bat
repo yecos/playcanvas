@@ -236,14 +236,22 @@ echo  Este paso es el mas largo. Se mostrara progreso.
 echo  Si falla, puedes reanudar ejecutando:
 echo    python scripts\download_models.py --retry
 echo.
-REM CivitAI token: leer de variable de entorno si existe, si no, saltar
-if defined CIVITAI_TOKEN (
-    echo  CIVITAI_TOKEN detectado en entorno.
-) else (
-    echo  NOTA: Juggernaut XL requiere token CivitAI (gratis).
-    echo  Si falla la descarga, registrate en https://civitai.com,
-    echo  crea API key y ejecuta: set CIVITAI_TOKEN=tu_token ^&^& python scripts\download_models.py --retry
-)
+REM CivitAI token: leer de variable de entorno si existe, si no, mostrar nota
+if defined CIVITAI_TOKEN goto civitai_set
+
+echo  NOTA: Juggernaut XL requiere token CivitAI gratis.
+echo  Si falla la descarga, registrate en https://civitai.com
+echo  y crea API key en Account Settings.
+echo  Luego ejecuta: set CIVITAI_TOKEN=tu_token
+echo  y vuelve a correr: python scripts\download_models.py --retry
+echo.
+goto civitai_done
+
+:civitai_set
+echo  CIVITAI_TOKEN detectado en entorno.
+
+:civitai_done
+echo.
 REM Descarga automatica (sin prompt)
 python scripts\download_models.py
 

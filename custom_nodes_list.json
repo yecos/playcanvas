@@ -100,10 +100,10 @@
       "description": "IPAdapter para consistencia de personajes y style transfer entre imagenes"
     },
     {
-      "name": "ComfyUI-BiRefNet",
-      "url": "https://github.com/ltdrdata/ComfyUI-BiRefNet.git",
+      "name": "ComfyUI-BRIA-RMBG",
+      "url": "https://github.com/ZHO-ZHO-ZHO/ComfyUI-BRIA-RMBG.git",
       "required": false,
-      "description": "Background removal de alta calidad para product photography"
+      "description": "Background removal de alta calidad (alternativa a BiRefNet, repo activo)"
     },
     {
       "name": "ComfyUI-Niutonian-Themes",
