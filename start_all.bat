@@ -51,31 +51,46 @@ timeout /t 2 /nobreak >nul
 REM ---- Activar venv ----
 call venv\Scripts\activate.bat
 
-REM ---- Leer launch_args ----
+REM ---- Leer launch_args (solo lineas que no empiezan con #) ----
 set "LAUNCH_ARGS="
-if exist "config\launch_args.txt" (
-    for /f "usebackq tokens=*" %%a in ("config\launch_args.txt") do (
-        set "line=%%a"
-        if not "!line:~0,1!"=="#" set "LAUNCH_ARGS=!LAUNCH_ARGS! %%a"
-    )
+for /f "usebackq eol=# tokens=*" %%a in ("config\launch_args.txt") do (
+    set "ARG=%%a"
+    if not "!ARG!"=="" set "LAUNCH_ARGS=!LAUNCH_ARGS! !ARG!"
 )
 
 REM ---- 1. Iniciar ComfyUI ----
 echo.
 echo  [1/5] Iniciando ComfyUI en http://127.0.0.1:8188 ...
+echo  Argumentos: !LAUNCH_ARGS!
 start "ComfyUI-Suite" /min cmd /c "cd ComfyUI && python main.py !LAUNCH_ARGS! > ..\logs\comfyui.log 2>&1"
-echo   PID guardado. Log: logs\comfyui.log
+echo   Proceso iniciado. Log: logs\comfyui.log
 
-REM ---- Esperar a que ComfyUI responda (max 90 seg) ----
-echo  Esperando a que ComfyUI responda (max 90s)...
+REM ---- Esperar a que ComfyUI responda (max 120 seg) ----
+echo  Esperando a que ComfyUI responda (max 120s)...
 set /a WAIT=0
 :wait_comfy
 python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8188/system_stats', timeout=2)" >nul 2>&1
 if errorlevel 1 (
     set /a WAIT+=2
-    if !WAIT! geq 90 (
-        echo  ERROR: ComfyUI no respondio en 90 segundos.
-        echo  Revisa logs\comfyui.log
+    if !WAIT! geq 120 (
+        echo  ERROR: ComfyUI no respondio en 120 segundos.
+        echo.
+        echo  === ULTIMAS 30 LINEAS DEL LOG ===
+        if exist "logs\comfyui.log" (
+            powershell -Command "Get-Content logs\comfyui.log -Tail 30" 2>nul
+        ) else (
+            echo  Log no existe. ComfyUI no llego a arrancar.
+        )
+        echo  ===================================
+        echo.
+        echo  Posibles causas:
+        echo    1. --front-end-version bloqueado por firewall
+        echo       Solucion: edita config\launch_args.txt y comenta la linea --front-end-version
+        echo    2. Custom node con error
+        echo       Solucion: revisa el log arriba
+        echo    3. Modelo corrupto
+        echo       Solucion: borra ComfyUI\models\checkpoints\*.safetensors corruptos
+        echo.
         pause
         exit /b 1
     )

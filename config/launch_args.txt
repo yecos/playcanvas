@@ -8,10 +8,11 @@
 #   - --front-end-handler fue eliminado (el frontend se gestiona automaticamente)
 
 # --- Nuevo frontend (Vue 3 + Svelte, default desde nov 2024) ---
-# Mas moderno, mejor UX, soporta user.css, Nodes 2.0, sidebar flotante
-# Si falla la descarga del frontend nuevo (firewall), comenta esta linea
-# para usar el frontend legacy que viene embebido en ComfyUI
---front-end-version Comfy-Org/ComfyUI_frontend@latest
+# MAS MODERNO pero requiere descargar ~50MB desde GitHub al arrancar.
+# Si tu firewall bloquea github.com descargas grandes, dejalo comentado
+# y ComfyUI usara el frontend legacy embebido (funciona igual de bien).
+# Para activarlo, descomenta la linea siguiente:
+# --front-end-version Comfy-Org/ComfyUI_frontend@latest
 
 # --- Metodo de preview ---
 --preview-method auto
