@@ -3,21 +3,23 @@
 # Una opcion por linea. Las lineas que empiezan con # se ignoran.
 # ============================================================
 # Documentacion completa: https://docs.comfy.org/
+# NOTA: La nueva version de ComfyUI cambio algunos argumentos:
+#   - --xformers ya no existe (activado por defecto, usar --disable-xformers para desactivar)
+#   - --front-end-handler fue eliminado (el frontend se gestiona automaticamente)
 
 # --- Nuevo frontend (Vue 3 + Svelte, default desde nov 2024) ---
 # Mas moderno, mejor UX, soporta user.css, Nodes 2.0, sidebar flotante
+# Si falla la descarga del frontend nuevo (firewall), comenta esta linea
+# para usar el frontend legacy que viene embebido en ComfyUI
 --front-end-version Comfy-Org/ComfyUI_frontend@latest
 
 # --- Metodo de preview ---
 --preview-method auto
 
 # --- Optimizaciones para RTX 3060 12GB ---
---xformers
+# (xformers esta activado por defecto en la nueva version)
 --use-pytorch-cross-attention
 --fp16-vae
-
-# --- Backend ---
---front-end-handler Comfy.WebSocketHandler
 
 # --- Escucha local ---
 --listen 127.0.0.1

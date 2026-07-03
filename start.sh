@@ -16,16 +16,14 @@ if [ ! -f "ComfyUI/main.py" ]; then
     exit 1
 fi
 
-# ---- Leer argumentos de lanzamiento ----
+# ---- Leer argumentos de lanzamiento (solo lineas que no empiezan con #) ----
 LAUNCH_ARGS=""
-if [ -f "config/launch_args.txt" ]; then
-    while IFS= read -r line; do
-        # Ignorar comentarios y lineas vacias
-        [[ "$line" =~ ^[[:space:]]*# ]] && continue
-        [[ -z "${line// }" ]] && continue
-        LAUNCH_ARGS="$LAUNCH_ARGS $line"
-    done < "config/launch_args.txt"
-fi
+while IFS= read -r line; do
+    # Ignorar comentarios y lineas vacias
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "${line// }" ]] && continue
+    LAUNCH_ARGS="$LAUNCH_ARGS $line"
+done < "config/launch_args.txt"
 
 echo ""
 echo " ============================================================"
@@ -54,4 +52,16 @@ cd ComfyUI
     done
 ) &
 
+# ---- Intentar arrancar ComfyUI ----
+echo "  Intentando iniciar ComfyUI..."
 python main.py $LAUNCH_ARGS
+
+# ---- Si fallo, intentar sin --front-end-version (frontend legacy) ----
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "  ComfyUI fallo con los argumentos actuales."
+    echo "  Intentando sin --front-end-version (frontend legacy)..."
+    echo ""
+    SAFE_ARGS="${LAUNCH_ARGS/--front-end-version Comfy-Org\/ComfyUI_frontend@latest/}"
+    python main.py $SAFE_ARGS
+fi
