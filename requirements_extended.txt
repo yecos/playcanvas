@@ -1,0 +1,51 @@
+# ============================================================
+# Dependencias Python para el orquestador de publicacion
+# Se instalan encima de requirements.txt
+# ============================================================
+
+# --- Cliente ComfyUI API ---
+websocket-client>=1.7.0
+requests>=2.31.0
+
+# --- Instagram (API privada - usar con precaucion) ---
+instagrapi>=2.0.0
+
+# --- Twitter/X ---
+tweepy>=4.14.0
+
+# --- Facebook Graph API ---
+facebook-sdk>=3.1.0
+
+# --- Pinterest ---
+py3-pin>=1.1.0
+
+# --- YouTube Data API ---
+google-api-python-client>=2.100.0
+google-auth-oauthlib>=1.2.0
+google-auth-httplib2>=0.2.0
+
+# --- TikTok (no oficial) ---
+tiktok-uploader>=3.0.0
+
+# --- API unificada (opcional, recomendada para produccion) ---
+ayrshare>=0.4.0
+
+# --- Calendar / scheduling ---
+pyairtable>=2.3.0
+schedule>=1.2.0
+APScheduler>=3.10.0
+
+# --- Env management ---
+python-dotenv>=1.0.0
+
+# --- Retry logic ---
+tenacity>=8.2.0
+
+# --- Image processing ---
+Pillow>=10.0.0
+
+# --- Cloudinary (hosting imagenes) ---
+cloudinary>=1.38.0
+
+# --- Logging / utils ---
+rich>=13.7.0

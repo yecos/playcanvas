@@ -1,6 +1,7 @@
 {
   "_comment": "Catalogo de modelos optimizado para NVIDIA RTX 3060 12GB. Editar libremente.",
-  "_total_size_gb_estimate": 25,
+  "_total_size_gb_estimate": 30,
+  "_updated": "2026-07-03 - Anadidos Flux.1 (schnell) y Wan 2.1 como opcionales para 2026",
 
   "checkpoints": [
     {
@@ -26,6 +27,13 @@
       "size_gb": 2.0,
       "required": true,
       "description": "DreamShaper 8 (SD 1.5) - Rapido para previews y videos AnimateDiff"
+    },
+    {
+      "name": "flux1-schnell.safetensors",
+      "url": "https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell.safetensors",
+      "size_gb": 11.9,
+      "required": false,
+      "description": "Flux.1 Schnell - Modelo 2024-2025 con mejor calidad de texto y coherencia que SDXL (12GB VRAM justos)"
     }
   ],
 
@@ -53,6 +61,13 @@
       "size_gb": 0.3,
       "required": false,
       "description": "VAE para SD 1.5 (mejora caras y detalles)"
+    },
+    {
+      "name": "ae.safetensors",
+      "url": "https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/ae.safetensors",
+      "size_gb": 0.3,
+      "required": false,
+      "description": "VAE para Flux.1 (requerido si usas flux1-schnell)"
     }
   ],
 
@@ -87,6 +102,36 @@
       "size_gb": 1.6,
       "required": false,
       "description": "AnimateDiff motion module v2 para SD 1.5 - videos cortos animados"
+    }
+  ],
+
+  "diffusion_models": [
+    {
+      "name": "wan2.1-t2v-1.3B.safetensors",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B/resolve/main/wan2.1_t2v_1.3B_bf16.safetensors",
+      "size_gb": 2.5,
+      "required": false,
+      "description": "Wan 2.1 Text-to-Video 1.3B - modelo de video 2025, optimizado para 12GB VRAM"
+    }
+  ],
+
+  "text_encoders": [
+    {
+      "name": "umt5_xxl.safetensors",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B/resolve/main/models_t5_umt5_xxl.safetensors",
+      "size_gb": 9.0,
+      "required": false,
+      "description": "UMT5-XXL text encoder para Wan 2.1 (necesario si usas Wan 2.1 video)"
+    }
+  ],
+
+  "clip_vision": [
+    {
+      "name": "clip_vision_h.safetensors",
+      "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors",
+      "size_gb": 1.7,
+      "required": false,
+      "description": "CLIP Vision encoder para IPAdapter (consistencia de personajes)"
     }
   ],
 

@@ -1,11 +1,12 @@
 # ComfyUI Social Media Suite 🎨🎬
 
-> Instalador todo-en-uno de **ComfyUI** optimizado para **RTX 3060 12GB** y orientado a la **creación de imágenes y videos para redes sociales** (Instagram, TikTok, YouTube, X/Twitter).
+> Instalador todo-en-uno de **ComfyUI** optimizado para **RTX 3060 12GB** y orientado a la **creación de imágenes y videos para redes sociales** (Instagram, TikTok, YouTube, X/Twitter, Facebook, Pinterest). Incluye **orquestador Python** para automatizar publicación multi-plataforma y **integración con agentes AI** (Hermes, etc.) vía MCP.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform: Windows + Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue)]()
 [![GPU: RTX 3060 12GB](https://img.shields.io/badge/GPU-RTX%203060%2012GB-green)]()
 [![Language: Español](https://img.shields.io/badge/Idioma-Espa%C3%B1ol-red)]()
+[![ComfyUI](https://img.shields.io/badge/ComfyUI-Latest-orange)]()
 
 ---
 
@@ -26,7 +27,7 @@
 
 ## 🎯 ¿Qué es esto?
 
-Este repositorio contiene un **instalador automático** que configura en tu PC todo lo necesario para usar ComfyUI como herramienta profesional de creación de contenido para redes sociales.
+Este repositorio contiene un **instalador automático** que configura en tu PC todo lo necesario para usar ComfyUI como herramienta profesional de creación de contenido para redes sociales, **más un orquestador Python** que automatiza la generación y publicación multi-plataforma.
 
 **El instalador hace todo por ti:**
 1. ✅ Verifica que tu PC cumple los requisitos (GPU, Python, Git, CUDA)
@@ -34,12 +35,19 @@ Este repositorio contiene un **instalador automático** que configura en tu PC t
 3. ✅ Crea un entorno virtual Python aislado
 4. ✅ Instala PyTorch con soporte CUDA 12.1
 5. ✅ Instala ComfyUI-Manager (gestor visual de extensiones)
-6. ✅ Instala custom nodes esenciales para redes sociales
-7. ✅ Descarga modelos optimizados para 12GB VRAM
-8. ✅ Copia workflows preconfigurados (Instagram, TikTok, YouTube, etc.)
+6. ✅ Instala **17 custom nodes esenciales** (incluye WD14 Tagger, VideoHelperSuite, LLM party, Comfyroll, WebhookNotifier, MCP server)
+7. ✅ Descarga modelos optimizados para 12GB VRAM (SDXL, Juggernaut, DreamShaper, Flux opcional, VAEs, ControlNets, AnimateDiff, Wan 2.1 opcional)
+8. ✅ Copia **9 workflows preconfigurados** (Instagram, TikTok, YouTube, X, Pinterest, Carrusel, Video, Logo, Multi-Aspect-Ratio)
 9. ✅ Crea accesos directos `start.bat` / `start.sh`
 
-Cuando termine, tendrás un ComfyUI **listo para producir contenido** sin tocar nada más.
+**Además, el orquestador `scripts/auto_publish.py`:**
+- 🤖 Lee un calendario JSON con los posts pendientes
+- 🎨 Ejecuta workflows vía ComfyUI API (REST + WebSocket)
+- 📤 Publica automáticamente a Instagram, Twitter/X, Facebook, Pinterest
+- ⏰ Soporta modo daemon (cron-style) para programación
+- 🔌 Preparado para integración con Hermes Agent vía MCP
+
+Cuando termine, tendrás un sistema **end-to-end** listo para producir y publicar contenido sin tocar nada más.
 
 ---
 
@@ -245,18 +253,24 @@ playcanvas/
 ├── start.bat / start.sh              # Lanzador de ComfyUI
 ├── update.bat / update.sh            # Actualizar todo
 ├── uninstall.bat / uninstall.sh      # Desinstalar
-├── requirements.txt                  # Dependencias Python
+├── requirements.txt                  # Dependencias Python base
+├── requirements_extended.txt         # Dependencias del orquestador
 ├── README.md                         # Este archivo
 ├── LICENSE                           # Licencia MIT
 │
 ├── config/                           # Configuración
 │   ├── launch_args.txt               # Argumentos de ComfyUI
-│   └── extra_model_paths.yaml        # Rutas de modelos externas
+│   ├── extra_model_paths.yaml        # Rutas de modelos externas
+│   ├── calendar_template.json        # Plantilla de calendario
+│   ├── calendar.json                 # Calendario activo (crear de template)
+│   └── .env.example                  # Plantilla de credenciales
 │
 ├── scripts/                          # Scripts Python
 │   ├── check_system.py               # Verificación de requisitos
 │   ├── download_models.py            # Descargador de modelos
 │   ├── install_custom_nodes.py       # Instalador de custom nodes
+│   ├── comfyui_api_client.py         # Wrapper API REST/WS de ComfyUI
+│   ├── auto_publish.py               # Orquestador de publicación
 │   └── utils.py                      # Utilidades compartidas
 │
 ├── workflows/                        # Workflows JSON preconfigurados
@@ -267,13 +281,15 @@ playcanvas/
 │   ├── twitter_post.json
 │   ├── carousel_5.json
 │   ├── animatediff_video.json
-│   └── logo_brand.json
+│   ├── logo_brand.json
+│   └── cr_aspect_ratio_social.json   # 1 render → 4 crops multi-plataforma
 │
 ├── docs/                             # Documentación
 │   ├── INSTALL.md
 │   ├── USAGE.md
 │   ├── MODELS.md
 │   ├── WORKFLOWS.md
+│   ├── ARCHITECTURE.md               # Arquitectura del sistema
 │   └── TROUBLESHOOTING.md
 │
 ├── models_list.json                  # Catálogo de modelos
@@ -281,6 +297,96 @@ playcanvas/
 ```
 
 > **Nota**: La carpeta `ComfyUI/` se crea durante la instalación y **no se sube al repo** (está en `.gitignore`).
+
+---
+
+## 🤖 Orquestador de Publicación Automática
+
+El sistema incluye `scripts/auto_publish.py` que automatiza todo el pipeline:
+
+### Configuración rápida
+
+1. **Copia credenciales**:
+   ```bash
+   cp config/.env.example .env
+   # Edita .env con tus credenciales de IG, Twitter, FB, Pinterest
+   ```
+
+2. **Crea tu calendario**:
+   ```bash
+   cp config/calendar_template.json config/calendar.json
+   # Edita calendar.json con tus posts
+   ```
+
+3. **Inicia ComfyUI**:
+   ```bash
+   start.bat  # o ./start.sh
+   ```
+
+4. **Ejecuta el orquestador** (en otra terminal):
+   ```bash
+   # Procesar todos los pendientes
+   python scripts/auto_publish.py
+
+   # Simular sin publicar
+   python scripts/auto_publish.py --dry-run
+
+   # Solo un post específico
+   python scripts/auto_publish.py --once post_001
+
+   # Solo Instagram
+   python scripts/auto_publish.py --platforms instagram
+
+   # Modo daemon continuo (cron)
+   python scripts/auto_publish.py --daemon --interval 300
+   ```
+
+### Flujo del orquestador
+
+```
+calendar.json → carga posts pendientes
+        ↓
+para cada post:
+    ↓
+    carga workflow JSON
+        ↓
+    sustituye prompt/seed/dimensiones
+        ↓
+    POST /prompt a ComfyUI API
+        ↓
+    espera vía WebSocket
+        ↓
+    descarga imágenes generadas
+        ↓
+    publica a IG / X / FB / Pinterest
+        ↓
+    actualiza calendar.json (status=published)
+```
+
+Más detalles en **docs/ARCHITECTURE.md**.
+
+---
+
+## 🔌 Integración con Agentes AI (Hermes, etc.)
+
+El sistema está preparado para integrarse con agentes AI autónomos:
+
+### Vía MCP Server (recomendado)
+El custom node `comfyui-mcp-server` expone ComfyUI como servidor MCP. Agentes como **Hermes Agent** pueden:
+- Listar workflows disponibles
+- Ejecutar workflows con parámetros
+- Instalar modelos y custom nodes
+- Self-improvement sobre resultados
+
+🔗 Doc oficial Hermes + ComfyUI: https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/creative/creative-comfyui
+
+### Vía API REST directa
+El wrapper `scripts/comfyui_api_client.py` puede ser usado como tool por cualquier LLM con function calling.
+
+### Vía n8n / Make.com (no-code)
+Para integración visual sin código, usar n8n con el nodo `n8n-nodes-comfyui`.
+
+Más detalles en **docs/ARCHITECTURE.md**.
 
 ---
 

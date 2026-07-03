@@ -1,5 +1,6 @@
 {
   "_comment": "Custom nodes esenciales para redes sociales. Se instalan en ComfyUI/custom_nodes/",
+  "_updated": "2026-07-03 - Anadidos VideoHelperSuite, WD14 Tagger, LLM party, Comfyroll, WebhookNotifier, MCP server",
 
   "nodes": [
     {
@@ -53,14 +54,56 @@
     {
       "name": "ComfyUI-WD14-Tagger",
       "url": "https://github.com/pythongosssss/ComfyUI-WD14-Tagger.git",
+      "required": true,
+      "description": "Auto-tagging de imagenes (booru tags) -> genera captions automaticos para los posts"
+    },
+    {
+      "name": "ComfyUI-VideoHelperSuite",
+      "url": "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git",
+      "required": true,
+      "description": "Load/Save video, extraccion de frames - base para Reels/TikTok/Shorts"
+    },
+    {
+      "name": "comfyui_LLM_party",
+      "url": "https://github.com/heshengtao/comfyui_LLM_party.git",
+      "required": true,
+      "description": "Framework LLM dentro de ComfyUI: OpenAI/Anthropic/Ollama para generar captions del post"
+    },
+    {
+      "name": "ComfyUI_Comfyroll_CustomNodes",
+      "url": "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes.git",
+      "required": true,
+      "description": "CR Aspect Ratio Social Media (1 render -> 4 crops IG/TikTok/X/Pinterest), CR Overlay Text, CR Value Scheduler"
+    },
+    {
+      "name": "ComfyUI-WebhookNotifier",
+      "url": "https://github.com/iSuneast/ComfyUI-WebhookNotifier.git",
+      "required": true,
+      "description": "POST HTTP a URL externa al terminar el job -> dispara orquestador Python/n8n"
+    },
+    {
+      "name": "comfyui-mcp-server",
+      "url": "https://github.com/joenorton/comfyui-mcp-server.git",
       "required": false,
-      "description": "Genera prompts automaticamente a partir de imagenes de referencia"
+      "description": "Puente MCP (Model Context Protocol) estandar para conectar agentes AI como Hermes a ComfyUI"
     },
     {
       "name": "ComfyUI-seamless-tiling",
       "url": "https://github.com/spinagon/ComfyUI-seamless-tiling.git",
       "required": false,
       "description": "Genera patrones seamless utiles para fondos de redes"
+    },
+    {
+      "name": "ComfyUI_IPAdapter_plus",
+      "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus.git",
+      "required": false,
+      "description": "IPAdapter para consistencia de personajes y style transfer entre imagenes"
+    },
+    {
+      "name": "ComfyUI-BiRefNet",
+      "url": "https://github.com/ltdrdata/ComfyUI-BiRefNet.git",
+      "required": false,
+      "description": "Background removal de alta calidad para product photography"
     }
   ]
 }

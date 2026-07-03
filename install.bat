@@ -134,7 +134,19 @@ echo.
 echo  Instalando dependencias de ComfyUI...
 pip install -r ComfyUI\requirements.txt
 pip install -r requirements.txt
-echo  OK: Dependencias instaladas.
+echo  OK: Dependencias base instaladas.
+
+REM ---- Dependencias del orquestador de publicacion ----
+echo.
+echo  Instalando dependencias del orquestador (auto_publish)...
+pip install -r requirements_extended.txt
+if errorlevel 1 (
+    echo  ADVERTENCIA: Algunas dependencias extendidas fallaron.
+    echo  El orquestador auto_publish.py puede no funcionar completo.
+    echo  Puedes instalarlas mas tarde: pip install -r requirements_extended.txt
+) else (
+    echo  OK: Dependencias del orquestador instaladas.
+)
 
 REM ---- 5. ComfyUI-Manager ----
 echo.

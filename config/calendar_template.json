@@ -1,0 +1,61 @@
+{
+  "_comment": "Calendario de contenido. Copia este archivo a calendar.json y personaliza.",
+  "_usage": "Cada post tiene: id, status (pending|published|failed|partial), workflow, prompt, caption, platforms, scheduled_at",
+  "last_updated": "2026-07-03T00:00:00Z",
+  "posts": [
+    {
+      "id": "post_001",
+      "status": "pending",
+      "workflow": "instagram_post",
+      "title": "Bienvenida",
+      "prompt": "professional photography, sharp focus, 8k uhd, high quality, detailed, studio lighting, vibrant colors, instagram ready, professional photo, perfect composition, futuristic cityscape at sunset",
+      "negative_prompt": "blurry, low quality, distorted, ugly, watermark, text, signature, jpeg artifacts",
+      "caption": "Bienvenidos a nuestro nuevo proyecto AI! ✨ #aiart #digitalart #innovation",
+      "platforms": ["instagram", "twitter", "facebook"],
+      "checkpoint": "juggernautXL_v9.safetensors",
+      "seed": 123456789,
+      "width": 1080,
+      "height": 1080,
+      "batch_size": 1,
+      "output_prefix": "post_001",
+      "scheduled_at": "2026-07-03T10:00:00",
+      "created_at": "2026-07-03T00:00:00Z"
+    },
+    {
+      "id": "post_002",
+      "status": "pending",
+      "workflow": "instagram_story",
+      "title": "Story - Detras de camaras",
+      "prompt": "vertical composition, behind the scenes, creative studio, designer working on laptop, warm lighting, instagram story, 9:16 aspect ratio, candid moment",
+      "negative_prompt": "blurry, low quality, distorted, ugly, watermark",
+      "caption": "Asi trabajamos en el estudio 🎨 #bts #studio",
+      "platforms": ["instagram"],
+      "checkpoint": "juggernautXL_v9.safetensors",
+      "seed": 987654321,
+      "width": 1080,
+      "height": 1920,
+      "batch_size": 1,
+      "output_prefix": "post_002",
+      "scheduled_at": "2026-07-04T18:00:00",
+      "created_at": "2026-07-03T00:00:00Z"
+    },
+    {
+      "id": "post_003",
+      "status": "pending",
+      "workflow": "youtube_thumbnail",
+      "title": "Thumbnail video AI",
+      "prompt": "engaging youtube thumbnail, bold composition, high contrast, dramatic lighting, expressive faces, clickbait style, eye-catching, vibrant colors, AI technology theme",
+      "negative_prompt": "blurry, low quality, distorted, ugly, watermark, jpeg artifacts",
+      "caption": "Nuevo video sobre IA en YouTube! Link en bio 🎬",
+      "platforms": ["twitter"],
+      "checkpoint": "juggernautXL_v9.safetensors",
+      "seed": 1122334455,
+      "width": 1280,
+      "height": 720,
+      "batch_size": 1,
+      "output_prefix": "post_003",
+      "scheduled_at": "2026-07-05T15:00:00",
+      "created_at": "2026-07-03T00:00:00Z"
+    }
+  ]
+}
