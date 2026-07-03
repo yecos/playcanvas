@@ -210,6 +210,23 @@ if errorlevel 1 (
     echo  OK: Dependencias del orquestador instaladas.
 )
 
+REM ---- CRITICO: Reinstalar PyTorch con CUDA (algunas dependencias pueden haberlo roto) ----
+echo.
+echo  Verificando que PyTorch siga teniendo soporte CUDA...
+python -c "import torch; exit(0 if torch.cuda.is_available() else 1)" >nul 2>&1
+if errorlevel 1 (
+    echo  ADVERTENCIA: PyTorch perdio soporte CUDA. Reinstalando version CUDA...
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 --force-reinstall
+    python -c "import torch; exit(0 if torch.cuda.is_available() else 1)" >nul 2>&1
+    if errorlevel 1 (
+        echo  ERROR: No se pudo restaurar PyTorch CUDA. ComfyUI funcionara en modo CPU.
+    ) else (
+        echo  OK: PyTorch CUDA restaurado correctamente.
+    )
+) else (
+    echo  OK: PyTorch CUDA verificado.
+)
+
 REM ---- 5. ComfyUI-Manager ----
 echo.
 echo  [5/8] Instalando ComfyUI-Manager...

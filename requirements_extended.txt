@@ -52,7 +52,10 @@ rich>=13.7.0
 
 # --- Moderation (NSFW detection) ---
 transformers>=4.40.0
-torch>=2.2.0  # ya instalado por ComfyUI, pero repetido por claridad
+# NOTA: NO incluir torch aqui. PyTorch con CUDA se instala en install.bat/install.sh
+# con el index-url correcto (https://download.pytorch.org/whl/cu121).
+# Si se incluye torch sin el index-url, pip instala la version CPU-only desde PyPI
+# y rompe el soporte CUDA.
 
 # --- Webhook server ---
 flask>=3.0.0
