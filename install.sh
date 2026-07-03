@@ -186,10 +186,15 @@ fi
 # Descarga automatica (sin prompt)
 python scripts/download_models.py || echo -e "${YELLOW}Algunos modelos pudieron fallar. Reejecuta con --retry${NC}"
 
-# Copiar extra_model_paths.yaml a ComfyUI
+# Copiar extra_model_paths.yaml a ComfyUI (solo si tiene contenido real, no solo comentarios)
 if [ -f "config/extra_model_paths.yaml" ] && [ ! -f "ComfyUI/extra_model_paths.yaml" ]; then
-    cp config/extra_model_paths.yaml ComfyUI/extra_model_paths.yaml
-    echo -e "  ${GREEN}OK:${NC} extra_model_paths.yaml copiado a ComfyUI"
+    # Verificar que tenga entradas reales (lineas que no sean comentarios ni vacias ni solo {})
+    if grep -v '^#' config/extra_model_paths.yaml | grep -v '^\s*$' | grep -v '^{}$' | grep -q .; then
+        cp config/extra_model_paths.yaml ComfyUI/extra_model_paths.yaml
+        echo -e "  ${GREEN}OK:${NC} extra_model_paths.yaml copiado a ComfyUI"
+    else
+        echo -e "  ${YELLOW}SKIP:${NC} extra_model_paths.yaml vacio (solo comentarios), no se copia"
+    fi
 fi
 
 # ---- 8. Workflows ----

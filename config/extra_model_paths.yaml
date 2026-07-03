@@ -2,14 +2,31 @@
 # Rutas adicionales de modelos
 # ComfyUI buscara modelos en estas carpetas ademas de las suyas
 # ============================================================
+#
+# IMPORTANTE: Este archivo DEBE contener al menos una entrada valida
+# o estar completamente vacio (sin comentarios). Si tiene solo
+# comentarios, YAML lo parsea como None y ComfyUI falla con:
+#   TypeError: 'NoneType' object is not iterable
+#
+# Formato:
+#   nombre_config:
+#     - /ruta/a/carpeta/checkpoints
+#     - /ruta/a/carpeta/loras
+#     - /ruta/a/carpeta/vae
+#
+# Ejemplos (descomenta y edita segun tu caso):
 
-# Ejemplo: carpeta compartida en disco D
-# D:/AI/models/checkpoints:
-#     - D:/AI/models/checkpoints
-#     - D:/AI/models/loras
-#     - D:/AI/models/vae
+# Carpeta compartida en disco D (Windows):
+# disco_d_modelos:
+#   - D:/AI/models/checkpoints
+#   - D:/AI/models/loras
+#   - D:/AI/models/vae
 
-# Ejemplo: carpeta en otro directorio
-# /home/user/ai-models:
-#     - /home/user/ai-models/sdxl
-#     - /home/user/ai-models/sd15
+# Carpeta en otro directorio (Linux/macOS):
+# ai_models:
+#   - /home/user/ai-models/sdxl
+#   - /home/user/ai-models/sd15
+
+# Marcador vacio para que YAML no devuelva None
+# (NO borrar esta linea, es necesaria para que ComfyUI no falle)
+{}

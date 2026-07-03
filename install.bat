@@ -255,11 +255,17 @@ echo.
 REM Descarga automatica (sin prompt)
 python scripts\download_models.py
 
-REM ---- Copiar extra_model_paths.yaml a ComfyUI ----
+REM ---- Copiar extra_model_paths.yaml a ComfyUI (solo si tiene contenido real) ----
 if exist "config\extra_model_paths.yaml" (
     if not exist "ComfyUI\extra_model_paths.yaml" (
-        copy /Y config\extra_model_paths.yaml ComfyUI\extra_model_paths.yaml >nul
-        echo  OK: extra_model_paths.yaml copiado a ComfyUI
+        REM Verificar que el archivo tenga entradas reales (no solo comentarios)
+        findstr /R /V "^#" "config\extra_model_paths.yaml" | findstr /R "." >nul
+        if not errorlevel 1 (
+            copy /Y config\extra_model_paths.yaml ComfyUI\extra_model_paths.yaml >nul
+            echo  OK: extra_model_paths.yaml copiado a ComfyUI
+        ) else (
+            echo  SKIP: extra_model_paths.yaml vacio \(solo comentarios\), no se copia
+        )
     )
 )
 
