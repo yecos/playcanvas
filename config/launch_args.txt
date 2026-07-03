@@ -1,0 +1,28 @@
+# ============================================================
+# Argumentos de lanzamiento de ComfyUI
+# Una opcion por linea. Las lineas que empiezan con # se ignoran.
+# ============================================================
+# Documentacion completa: https://docs.comfy.org/
+
+# --- Metodo de preview ---
+--preview-method auto
+
+# --- Optimizaciones para RTX 3060 12GB ---
+--xformers
+--use-pytorch-cross-attention
+--fp16-vae
+
+# --- Backend ---
+--front-end-handler Comfy.WebSocketHandler
+
+# --- Escucha local ---
+--listen 127.0.0.1
+--port 8188
+
+# --- Si tienes 8GB o menos, descomenta estas lineas:
+# --lowvram
+# --force-fp16
+
+# --- Para acceso desde otros dispositivos en tu red, descomenta:
+# --listen 0.0.0.0
+# --enable-cors-header

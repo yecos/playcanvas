@@ -1,0 +1,15 @@
+# ============================================================
+# Rutas adicionales de modelos
+# ComfyUI buscara modelos en estas carpetas ademas de las suyas
+# ============================================================
+
+# Ejemplo: carpeta compartida en disco D
+# D:/AI/models/checkpoints:
+#     - D:/AI/models/checkpoints
+#     - D:/AI/models/loras
+#     - D:/AI/models/vae
+
+# Ejemplo: carpeta en otro directorio
+# /home/user/ai-models:
+#     - /home/user/ai-models/sdxl
+#     - /home/user/ai-models/sd15

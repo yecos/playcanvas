@@ -1,0 +1,66 @@
+{
+  "_comment": "Custom nodes esenciales para redes sociales. Se instalan en ComfyUI/custom_nodes/",
+
+  "nodes": [
+    {
+      "name": "ComfyUI-Manager",
+      "url": "https://github.com/comfy-org/ComfyUI-Manager.git",
+      "required": true,
+      "description": "Gestor visual de extensiones y modelos"
+    },
+    {
+      "name": "ComfyUI-Impact-Pack",
+      "url": "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git",
+      "required": true,
+      "description": "Upscaling, deteccion de rostros, detallador (esencial para retratos)"
+    },
+    {
+      "name": "ComfyUI_essentials",
+      "url": "https://github.com/cubiq/ComfyUI_essentials.git",
+      "required": true,
+      "description": "Nodos utilitarios esenciales (texto, imagen, conversiones)"
+    },
+    {
+      "name": "rgthree-comfy",
+      "url": "https://github.com/rgthree/rgthree-comfy.git",
+      "required": true,
+      "description": "Power prompts, Mute/Bypass switches, contexto avanzado"
+    },
+    {
+      "name": "ComfyUI-Custom-Scripts",
+      "url": "https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git",
+      "required": true,
+      "description": "Mejoras de UI: autocompletar, finding, math, etc."
+    },
+    {
+      "name": "ComfyUI-AnimateDiff-Evolved",
+      "url": "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git",
+      "required": false,
+      "description": "AnimateDiff mejorado para videos animados (TikTok, Reels)"
+    },
+    {
+      "name": "comfyui_controlnet_aux",
+      "url": "https://github.com/Fannovel16/comfyui_controlnet_aux.git",
+      "required": false,
+      "description": "Preprocesadores para ControlNet (depth, canny, openpose, etc.)"
+    },
+    {
+      "name": "was-node-suite-comfyui",
+      "url": "https://github.com/WASasquatch/was-node-suite-comfyui.git",
+      "required": false,
+      "description": "Suite de nodos avanzados de WAS (filtros, manipulacion, etc.)"
+    },
+    {
+      "name": "ComfyUI-WD14-Tagger",
+      "url": "https://github.com/pythongosssss/ComfyUI-WD14-Tagger.git",
+      "required": false,
+      "description": "Genera prompts automaticamente a partir de imagenes de referencia"
+    },
+    {
+      "name": "ComfyUI-seamless-tiling",
+      "url": "https://github.com/spinagon/ComfyUI-seamless-tiling.git",
+      "required": false,
+      "description": "Genera patrones seamless utiles para fondos de redes"
+    }
+  ]
+}

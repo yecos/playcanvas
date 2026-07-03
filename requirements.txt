@@ -1,0 +1,31 @@
+# ============================================================
+# Dependencias Python adicionales para ComfyUI Social Suite
+# Se instalan encima de ComfyUI/requirements.txt
+# ============================================================
+
+# --- Utilidades de red y descarga ---
+requests>=2.31.0
+tqdm>=4.66.0
+aiohttp>=3.9.0
+
+# --- Procesamiento de imágenes/videos para redes sociales ---
+Pillow>=10.0.0
+opencv-python>=4.8.0
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.9
+numpy>=1.24.0
+
+# --- Metadata EXIF para posts ---
+piexif>=1.1.3
+
+# --- Optimizaciones de rendimiento ---
+xformers>=0.0.23
+safetensors>=0.4.0
+accelerate>=0.27.0
+
+# --- Integración con ComfyUI API (automatización) ---
+websocket-client>=1.7.0
+
+# --- Utilidades ---
+pyyaml>=6.0
+rich>=13.7.0

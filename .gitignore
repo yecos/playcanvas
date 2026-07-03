@@ -1,54 +1,70 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ============================================
+# ComfyUI Social Media Suite - .gitignore
+# ============================================
 
-# dependencies
-node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# --- ComfyUI core (cloned by installer) ---
+ComfyUI/
+comfyui/
+ComfyUI_windows_portable/
 
-# testing
-/coverage
+# --- Python virtual environments ---
+venv/
+.venv/
+env/
+ENV/
+*.pyc
+__pycache__/
+*.pyo
+*.egg-info/
+dist/
+build/
 
-# next.js
-/.next/
-/out/
+# --- Downloaded models (too large for git) ---
+ComfyUI/models/checkpoints/*.safetensors
+ComfyUI/models/checkpoints/*.pth
+ComfyUI/models/checkpoints/*.ckpt
+ComfyUI/models/loras/*.safetensors
+ComfyUI/models/vae/*.safetensors
+ComfyUI/models/vae/*.pth
+ComfyUI/models/embeddings/*.pt
+ComfyUI/models/embeddings/*.safetensors
+ComfyUI/models/controlnet/*.safetensors
+ComfyUI/models/controlnet/*.pth
+ComfyUI/models/animatediff_models/*.safetensors
+ComfyUI/models/upscale_models/*.pth
+ComfyUI/models/upscale_models/*.safetensors
+ComfyUI/models/diffusion_models/*.safetensors
+ComfyUI/models/text_encoders/*.safetensors
+ComfyUI/models/text_encoders/*.gguf
+ComfyUI/models/clip_vision/*.safetensors
+ComfyUI/models/clip_vision/*.pth
 
-# production
-/build
+# --- Custom nodes (installed by script) ---
+ComfyUI/custom_nodes/*
+!ComfyUI/custom_nodes/.gitkeep
 
-# misc
-.DS_Store
-*.pem
+# --- Output images / videos (user-generated) ---
+ComfyUI/output/*
+!ComfyUI/output/.gitkeep
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-local-*
-.claude
-.z-ai-config
+# --- Logs ---
 *.log
-dev.log
-dev.out.log
-test
-prompt
+logs/
+ComfyUI/*.log
 
-server.log
-# Skills directory
-/skills/
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Temp ---
+*.tmp
+*.bak
+*.cache
+.cache/

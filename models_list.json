@@ -1,0 +1,119 @@
+{
+  "_comment": "Catalogo de modelos optimizado para NVIDIA RTX 3060 12GB. Editar libremente.",
+  "_total_size_gb_estimate": 25,
+
+  "checkpoints": [
+    {
+      "name": "sd_xl_base_1.0.safetensors",
+      "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors",
+      "size_gb": 6.5,
+      "required": true,
+      "description": "SDXL Base 1.0 - Modelo principal para posts de Instagram, YouTube, etc."
+    },
+    {
+      "name": "juggernautXL_v9.safetensors",
+      "url": "https://civitai.com/api/download/models/45618?type=Model&format=SafeTensor&size=pruned&fp=fp16",
+      "size_gb": 6.5,
+      "required": true,
+      "description": "Juggernaut XL v9 - Excelente para fotografias realistas y retratos",
+      "headers": {
+        "Authorization": "Bearer"
+      }
+    },
+    {
+      "name": "dreamshaper_8.safetensors",
+      "url": "https://huggingface.co/Lykon/DreamShaper/resolve/main/DreamShaper_8_pruned.safetensors",
+      "size_gb": 2.0,
+      "required": true,
+      "description": "DreamShaper 8 (SD 1.5) - Rapido para previews y videos AnimateDiff"
+    }
+  ],
+
+  "loras": [
+    {
+      "name": "detail_tweaker_xl.safetensors",
+      "url": "https://huggingface.co/sterloDetailTweakerXL/resolve/main/detail_tweaker_xl.safetensors",
+      "size_gb": 0.05,
+      "required": false,
+      "description": "Detail Tweaker XL - Mejora detalles finos en SDXL"
+    }
+  ],
+
+  "vae": [
+    {
+      "name": "sdxl_vae.safetensors",
+      "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sdxl_vae.safetensors",
+      "size_gb": 0.3,
+      "required": true,
+      "description": "VAE oficial para SDXL (mejora colores)"
+    },
+    {
+      "name": "vae-ft-mse-840000-ema-pruned.safetensors",
+      "url": "https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.safetensors",
+      "size_gb": 0.3,
+      "required": false,
+      "description": "VAE para SD 1.5 (mejora caras y detalles)"
+    }
+  ],
+
+  "controlnet": [
+    {
+      "name": "control_v11f1p_sd15_depth.pth",
+      "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_depth.pth",
+      "size_gb": 1.4,
+      "required": false,
+      "description": "ControlNet Depth para SD 1.5 - control de profundidad"
+    },
+    {
+      "name": "control_v11p_sd15_canny.pth",
+      "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_canny.pth",
+      "size_gb": 1.4,
+      "required": false,
+      "description": "ControlNet Canny para SD 1.5 - control de bordes"
+    },
+    {
+      "name": "control_v11f1p_sd15_openpose.pth",
+      "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_openpose.pth",
+      "size_gb": 1.4,
+      "required": false,
+      "description": "ControlNet OpenPose para SD 1.5 - control de poses humanas"
+    }
+  ],
+
+  "animatediff_models": [
+    {
+      "name": "mm_sd_v15_v2.ckpt",
+      "url": "https://huggingface.co/guoyww/AnimateDiff/resolve/main/mm_sd_v15_v2.ckpt",
+      "size_gb": 1.6,
+      "required": false,
+      "description": "AnimateDiff motion module v2 para SD 1.5 - videos cortos animados"
+    }
+  ],
+
+  "upscale_models": [
+    {
+      "name": "4x-UltraSharp.pth",
+      "url": "https://huggingface.co/lokCX/4x-Ultrasharp/resolve/main/4x-UltraSharp.pth",
+      "size_gb": 0.07,
+      "required": false,
+      "description": "Upscaler 4x UltraSharp - mejora nitidez de posts"
+    }
+  ],
+
+  "embeddings": [
+    {
+      "name": "bad_prompt_version2.pt",
+      "url": "https://huggingface.co/datasets/Nerfgun3/bad_prompt/resolve/main/bad_prompt_version2.pt",
+      "size_gb": 0.02,
+      "required": false,
+      "description": "Embedding negative prompt para SD 1.5"
+    },
+    {
+      "name": "EasyNegative.safetensors",
+      "url": "https://huggingface.co/embed/EasyNegative/resolve/main/EasyNegative.safetensors",
+      "size_gb": 0.02,
+      "required": false,
+      "description": "EasyNegative - negative prompt para SD 1.5"
+    }
+  ]
+}
